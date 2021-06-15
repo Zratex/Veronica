@@ -45,6 +45,16 @@ async def inscription(ctx):
             await ctx.send("Vous êtes désormais inscrit à l'événement de la semaine <@!{}> !".format(ctx.author.id))
             await ctx.author.add_roles(role)
 
+@client.command(aliases=['désinscription'])
+async def desinscription(ctx):
+    if ctx.channel.id == 397378707960102922 or ctx.channel.id == 827971395731324969:
+        role = discord.utils.get(ctx.guild.roles, name="Inscrit")
+        if role in ctx.author.roles:
+            await ctx.send("Vous êtes désormais désinscrit de l'événement de la semaine <@!{}> !".format(ctx.author.id))
+            await ctx.author.delete_roles(role)
+        else:
+            await ctx.send("Vous n'êtes pas inscrit à l'événement de la semaine <@!{}> !".format(ctx.author.id))
+
 @client.command()
 async def test(ctx):
     if ctx.author.id == 323147727779397632: #Check if it's Zratey
