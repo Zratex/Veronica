@@ -62,45 +62,23 @@ async def event(ctx):
 
 @client.command()
 #recherche sur Google
-async def google(ctx):
-    txt = ctx.message.content
-    txt = txt[9:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via le moteur de recherche Google : https://www.google.com/search?q={}".format(txt2))
-    await ctx.channel.send("Peut être que la définition de ce que vous cherchez est sur Urban Dictionay ? Essayez la commande ``v.meaning``")
+async def google(ctx, *, args):
+	args = args.replace(' ', '+')
+	await ctx.send(f"Voilà le résultat de votre recherche via le moteur de recherche Google : https://www.google.com/search?q={args}")
+	await ctx.send("Peut être que la définition de ce que vous cherchez est sur Urban Dictionay ? Essayez la commande ``v.meaning``")
 
 @client.command()
 #recherche sur Wiki
-async def wiki(ctx):
-    txt = ctx.message.content
-    txt = txt[7:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via Wikipédia : https://fr.wikipedia.org/w/index.php?search={}".format(txt2))
-    await ctx.channel.send("Si rien ne s'affiche, cela veux dire que ce que vous avez recherché n'existe pas sur Wikipédia. Essayez une simple recherche internet avec ``v.google``")
+async def wiki(ctx, *, args):
+	args = args.replace(' ', '+')
+	await ctx.send(f"Voilà le résultat de votre recherche via Wikipédia : https://fr.wikipedia.org/w/index.php?search={args}")
+	await ctx.send("Si rien ne s'affiche, cela veux dire que ce que vous avez recherché n'existe pas sur Wikipédia. Essayez une simple recherche internet avec ``v.google``")
 @client.command()
 #recherche sur Google
-async def meaning(ctx):
-    txt = ctx.message.content
-    txt = txt[10:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via Urban Dictionnary : https://www.urbandictionary.com/define.php?term={}".format(txt2))
-    await ctx.channel.send("Sa définition n'existe peut être pas sur Urban Dicrionnary, donc pourquoi pas faire votre propre recherche ? Essayez la commande ``v.google``")
-
+async def meaning(ctx, *, args):
+	args = args.replace(' ', '+')
+	await ctx.send(f"Voilà le résultat de votre recherche via Urban Dictionnary : https://www.urbandictionary.com/define.php?term={args}")
+	await ctx.send("Sa définition n'existe peut être pas sur Urban Dicrionnary, donc pourquoi pas faire votre propre recherche ? Essayez la commande ``v.google``")
 
 
     
