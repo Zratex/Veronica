@@ -55,9 +55,10 @@ async def event(ctx):
     if ctx.channel.id == 397378707960102922 or ctx.channel.id == 397367943769358338:
         role = discord.utils.get(ctx.guild.roles, name="Event")
         if role in ctx.author.roles:
-            await ctx.send("Vous avez déjà le role !")
+            await ctx.send(f"Vous n'avez plus le role event {ctx.author.id} ! Vous ne serez plus ping pour les prochains event")
+            await ctx.author.delete_roles(role)
         else:
-            await ctx.send("Vous avez obtenu le role event <@!{}> ! Vous serez ping à chaque fois qu'un nouvel event se déroulera :)".format(ctx.author.id))
+            await ctx.send(f"Vous avez obtenu le role event {ctx.author.id} ! Vous serez ping à chaque fois qu'un nouvel event se déroulera :)")
             await ctx.author.add_roles(role)
 
 @client.command()
