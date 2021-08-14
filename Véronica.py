@@ -1,13 +1,6 @@
 from datetime import date
 import discord
-from random import randint
-import calendar
 from discord.ext import commands
-from discord.utils import get
-from discord import User
-import time
-import os
-import random
 import Database
 client = commands.Bot(command_prefix = 'v.')
 
@@ -26,6 +19,47 @@ def verification(id):
         #Le compte n'existe pas
         return False
 
+@client.command()
+async def load(ctx, name=None):
+    """Permet de charger une extension de commandes"""
+    if ctx.author.id == 323147727779397632:
+            if name:
+                client.load_extension(name)
+                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été chargé.".format(name))
+    else:
+        await ctx.send("Je n'autorise pas n'importe qui à me toucher !")
+
+
+@client.command()
+async def unload(ctx, name=None):
+    """Permet de décharger une extension de commandes"""
+    if ctx.author.id == 323147727779397632:
+        try:
+            if name:
+                client.unload_extension(name)
+                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été déchargé.".format(name))
+        except:
+            await ctx.send("Le fichier d'extension `{}.py` n'a pas pu être déchargé (ou il n'existe pas).".format(name))
+    else:
+        await ctx.send("Je n'autorise pas n'importe qui à me toucher !")
+
+
+@client.command()
+async def reload(ctx, name=None):
+    if ctx.author.id == 323147727779397632:
+        if name:
+            try:
+                client.reload_extension(name)
+                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été rechargé.".format(name))
+            except:
+                try:
+                    client.load_extension(name)
+                    await ctx.send("Le fichier d'extention `{}.py` a bel et bien été chargé.".format(name))
+                except:
+                    await ctx.send("Le fichier d'extension `{}.py` n'a pas pu être rechargé (ou il n'existe pas).".format(name))
+    else:
+        await ctx.send("Je n'autorise pas n'importe qui à me toucher !")
+
 @client.event
 async def on_message(message):
     #Réaction coucou
@@ -36,7 +70,7 @@ async def on_message(message):
     
     #Xp
     if not message.author.bot:
-        if message.channel.id != #Il faut insérer une liste de channels qui n'xp pas:
+        if message.channel.id == 397378707960102922:
             test=verification(message.author.id)
             if test: #Vérifie si l'utilisateur a un compte
                 xp = Database.exp(message.author.id)
@@ -54,185 +88,8 @@ class MyClient(discord.Client):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
             return
-        
-@client.command()
-async def jail(ctx,user: User):
-    """Permet de mettre ou faire ressortir quelqu'un de prison"""
-    role = discord.utils.get(ctx.guild.roles, name="Chefs cuisiniers 🍴")
-    if role in ctx.author.roles:
-        if role in user.roles:
-            await ctx.send("Vous ne pouvez pas mettre un membre de la modération en prison !")
-        else:
-            jail = discord.utils.get(ctx.guild.roles, name="Jail")
-            fan_de_nouilles = discord.utils.get(ctx.guild.roles, name="Fan de nouilles 🍜")
-            if fan_de_nouilles in user.roles:
-                await user.add_roles(jail)
-                await user.remove_roles(fan_de_nouilles)
-                await ctx.send("{} est désormais en prison !".format(user))
-            elif jail in user.roles:
-                await user.add_roles(fan_de_nouilles)
-                await user.remove_roles(jail)
-                await ctx.send("{} est sorti de prison !".format(user))
-    else:
-        await ctx.send("Vous n'avez pas la permission pour executer cette commande")
 
-@client.command()
-async def here(ctx):
-    """Le check in du bot"""
-    if ctx.channel.id == 397378707960102922 or ctx.channel.id == 827971395731324969:
-        role = discord.utils.get(ctx.guild.roles, name="Inscrit")
-        checkin = discord.utils.get(ctx.guild.roles, name="Checked In")
-        if checkin in ctx.author.roles:
-            await ctx.send("Vous avez déjà confirmé votre présence !")
-        else:
-            if role in ctx.author.roles:
-                await ctx.send("Merci d'avoir vérifié votre présence pour l'événement de la semaine <@!{}> !".format(ctx.author.id))
-                await ctx.author.add_roles(checkin)
-            else:
-                await ctx.send("Soyez sur d'être inscrit avant de confirmer votre présence. Pour vous inscrire, effectuez la commande ``v.inscription``")
-            
 
-@client.command()
-async def inscription(ctx):
-    """S'inscrit à un certain event"""
-    if ctx.channel.id == 397378707960102922 or ctx.channel.id == 827971395731324969:
-        role = discord.utils.get(ctx.guild.roles, name="Inscrit")
-        if role in ctx.author.roles:
-            await ctx.send("Vous vous êtes déjà inscrit <@!{}> !".format(ctx.author.id))
-        else:
-            await ctx.send("Vous êtes désormais inscrit à l'événement de la semaine <@!{}> !".format(ctx.author.id))
-            await ctx.author.add_roles(role)
-
-@client.command()
-async def test(ctx):
-    """Commande de test de Zratey"""
-    if ctx.author.id == 323147727779397632: #Check if it's Zratey
-        untest = await ctx.send("test")
-        await untest.add_reaction('👍')
-        def check(reaction,emoji):
-            return reaction.message.id == untest.id and str(reaction.emoji) == '👍'
-        reaction, reaction_bot = await client.wait_for('reaction_add', check=check, timeout=60)
-        if reaction_bot.id == untest.author.id:
-            try:
-                reaction, user = await client.wait_for('reaction_add', check=check, timeout=60)
-                await ctx.send("Complete")
-            except:
-                await ctx.send("Commande interrompu. Vous avez pris trop de temps pour répondre")
-    else:
-        await ctx.send("Seul Zratey est autorisé à utiliser cette commande")
-
-@client.command()
-async def clear(ctx, nombre : int):
-    """Supprime un certain nombre de messages selon le nombre indiqué. Cette commande est accessible seulement par les membres de la modération"""
-    role = discord.utils.get(ctx.guild.roles, name="Chefs cuisiniers 🍴")
-    if role in ctx.author.roles:
-        messages = await ctx.channel.history(limit = nombre + 1).flatten()
-        for message in messages :
-            await message.delete()
-        clear_done = await ctx.send("{} messages ont été effacés avec succès".format(nombre))
-        time.sleep(10)
-        await clear_done.delete()
-    else:
-        await ctx.send("Vous n'avez pas les permissions pour executer cette commande")
-
-@client.command()
-async def event(ctx):
-    """Permet d'être notifié quand une information est transmise à propos d'un event organisé sur le serveur"""
-    if ctx.channel.id == 397378707960102922 or ctx.channel.id == 397367943769358338:
-        role = discord.utils.get(ctx.guild.roles, name="Event")
-        if role in ctx.author.roles:
-            await ctx.send("Vous avez déjà le role !")
-        else:
-            await ctx.send("Vous avez obtenu le role event <@!{}> ! Vous serez ping à chaque fois qu'un nouvel event se déroulera :)".format(ctx.author.id))
-            await ctx.author.add_roles(role)
-
-@client.command()
-async def kick(ctx, userName: discord.Member, raison):
-    """Commande accessible seulement à la modération de BDN permettant de kick une personne"""
-    role = discord.utils.get(ctx.guild.roles, name="Chefs cuisiniers 🍴")
-    if role in ctx.author.roles:
-        await kick(userName, reason=raison)
-        await client.channel.send("{userName} a été kick du serveur")
-        
-    else:
-        raison="A essayé de faire son malin en voulant tester la commande de kick"
-        await ctx.author.send("{0.author.mention}, Merci de ta contribution dans la 'science' voici le lien pour revenir : https://discord.gg/Pds2TyRr ")
-        await kick(ctx.author, reason=raison)
-        await ctx.channel.send("Vous n'avez normalement pas l'authorisation de kick quelqu'un. Donc je vous ait kick :) Ca vous apprendra")
-
-@client.command(aliases=['8ball'])
-async def ball(ctx):
-    """Littéralement un 8ball"""
-    eightballrandom = randint(1,8)
-    if eightballrandom == 1:
-        await ctx.send("Oui")
-    elif eightballrandom == 2:
-        await ctx.send("Non")
-    elif eightballrandom == 3:
-        await ctx.send("Peut être")
-    elif eightballrandom == 4:
-        await ctx.send("Surement")
-    elif eightballrandom == 5:
-        await ctx.send("Laisse moi réfléchir...")
-        time.sleep(5)
-        await ctx.send("Un peu débile comme question non ?")
-    elif eightballrandom == 6:
-        await ctx.send("Je n'ai pas l'autorisation de répondre à une tel question")
-    elif eightballrandom == 7:
-        await ctx.send("Je n'en suis pas si sûre...")
-    elif eightballrandom == 8:
-        await ctx.send("Pour le savoir, essais de le résoudre par toi même !")
-        time.sleep(10)
-        tentative_don = await ctx.send("Tu peux me payer 10$ sinon pour répondre à cette question ")
-        time.sleep(2)
-        await tentative_don.delete()
-
-@client.command()
-#recherche sur Google
-async def google(ctx):
-    """Permet de faire une recherche rapide sur Google à partir d'une simple commande"""
-    txt = ctx.message.content
-    txt = txt[9:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via le moteur de recherche Google : https://www.google.com/search?q={}".format(txt2))
-    await ctx.channel.send("Peut être que la définition de ce que vous cherchez est sur Urban Dictionay ? Essayez la commande ``v.meaning``")
-
-@client.command()
-async def wiki(ctx):
-    """Permet de faire une recherche rapide sur Wikipédia à partir d'une simple commande"""
-    txt = ctx.message.content
-    txt = txt[7:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via Wikipédia : https://fr.wikipedia.org/w/index.php?search={}".format(txt2))
-    await ctx.channel.send("Si rien ne s'affiche, cela veux dire que ce que vous avez recherché n'existe pas sur Wikipédia. Essayez une simple recherche internet avec ``v.google``")
-@client.command()
-async def meaning(ctx):
-    """Permet de faire une recherche rapide sur Urban Dictionnary à partir d'une simple commande"""
-    txt = ctx.message.content
-    txt = txt[10:]
-    txt2 =""
-    for x in txt:
-        if x == " ":
-            txt2=txt2+"_"
-        else:
-            txt2=txt2+x
-    await ctx.channel.send("Voilà le résultat de votre recherche via Urban Dictionnary : https://www.urbandictionary.com/define.php?term={}".format(txt2))
-    await ctx.channel.send("Sa définition n'existe peut être pas sur Urban Dicrionnary, donc pourquoi pas faire votre propre recherche ? Essayez la commande ``v.google``")
-
-@client.command()
-async def gamemode(ctx):
-    """Cheat code"""
-    await ctx.channel.send("`Java Error occured : Java is not installed in this current system because, man, je suis un Bot Discord pas l'invité de commande MineCraft`")
 
 # -------------------------------------------------------------- DATABASE ----------------------------------------------------------------
 
@@ -335,12 +192,7 @@ async def shop(ctx):
         else: #mauvaise personne qui répond
             await ctx.send("Ce n'est pas à vous {} de réagir au message ! La commande a été annulé, {} réeffectuez la commande pour la réinitialiser".format(user.mention,ctx.author.mention))
 # -------------------------------------------------------------- FIN ARGENT ----------------------------------------------------------------
-@client.command()
-async def pdp(ctx):
-    embedVar = discord.Embed(color=discord.Color.blue())
-    embedVar.add_field(name="Commande réalisée par {}".format(ctx.author), value="Voici votre photo de profile", inline=False)
-    embedVar.set_image(url="{}".format(ctx.author.avatar_url))
-    await ctx.send(embed=embedVar)
+
 
 filetoken = open(f"E:\\Véronica\\token.txt", "r")
 for x in filetoken:
