@@ -5,7 +5,7 @@ import time
 from random import randint
 
 
-con = sqlite3.connect(f'E:\\Véronica\\Veronica.db')
+con = sqlite3.connect(f'D:\\Documents\\Véronica\\Veronica.db')
 cur = con.cursor()
 
 
@@ -19,7 +19,8 @@ def creataccount(id):
     Recup = 'SELECT COUNT(*) FROM user WHERE ID_Discord={}'.format(id)
     cur.execute(Recup)
     Verif = cur.fetchone()[0]
-    if Verif == 0 : 
+    print(Verif)
+    if Verif == 0: 
         today = datetime.datetime.now()
         today=today.strftime("%d/%m/%Y, %H:%M:%S")
         insertdata = """INSERT INTO user VALUES (?,1,0,0,0,NULL,?);"""
@@ -42,7 +43,7 @@ def info(id):
 
 def testUser(id):
     cur = con.cursor()
-    Recup = 'SELECT COUNT(*) FROM User WHERE ID_Discord={}'.format(id)
+    Recup = 'SELECT COUNT(*) FROM user WHERE ID_Discord={}'.format(id)
     cur.execute(Recup)
     Verif = cur.fetchone()[0]
     if Verif == 0 : 
@@ -131,7 +132,7 @@ def exp(id):
         return(result) #2 pour signifier que ce n'est pas un rank up
 
 def depense(id,cout):
-    Recup = "SELECT Money FROM User WHERE ID_Discord={}".format(id)
+    Recup = "SELECT Money FROM user WHERE ID_Discord={}".format(id)
     cur.execute(Recup)
     RecupMoney = cur.fetchone()[0]
     if RecupMoney-cout < 0:
