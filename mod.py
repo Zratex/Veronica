@@ -31,7 +31,7 @@ class ModerationCommandes(commands.Cog):
     @commands.command()
     async def jail(self,ctx,user: User):
         """Permet de mettre ou faire ressortir quelqu'un de prison"""
-        role = discord.utils.get(ctx.guild.roles, name="Chefs cuisiniers 🍴")
+        role = discord.utils.get(ctx.guild.roles, name="Cuisiniers🍴")
         if role in ctx.author.roles:
             if role in user.roles:
                 await ctx.send("Vous ne pouvez pas mettre un membre de la modération en prison !")
@@ -48,3 +48,13 @@ class ModerationCommandes(commands.Cog):
                 await ctx.send("{} est sorti de prison !".format(user))
         else:
             await ctx.send("Vous n'avez pas la permission pour executer cette commande")
+
+    @commands.command()
+    async def mp(self,ctx, member: discord.Member,*,content):
+        if ctx.author.id == 323147727779397632: #Check if it's Zratey
+            channel = await member.create_dm()
+            await channel.send(content)
+            await ctx.send("Le message a bien été envoyé")
+        else:
+            await ctx.send("Non !")
+            await ctx.send("<:veropillow:909029139682562108><:veropillow2:909029164240232468>")
