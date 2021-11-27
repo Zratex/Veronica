@@ -1,4 +1,5 @@
 import discord
+import time
 from discord.ext import commands
 from discord import User
 
@@ -45,7 +46,7 @@ class ModerationCommandes(commands.Cog):
                 elif jail in user.roles:
                     await user.add_roles(fan_de_nouilles)
                     await user.remove_roles(jail)
-                await ctx.send("{} est sorti de prison !".format(user))
+                    await ctx.send("{} est sorti de prison !".format(user))
         else:
             await ctx.send("Vous n'avez pas la permission pour executer cette commande")
 
@@ -58,3 +59,17 @@ class ModerationCommandes(commands.Cog):
         else:
             await ctx.send("Non !")
             await ctx.send("<:veropillow:909029139682562108><:veropillow2:909029164240232468>")
+    
+    @commands.command()
+    async def clear(self,ctx, nombre : int):
+        """Supprime un certain nombre de messages selon le nombre indiqué. Cette commande est accessible seulement par les membres de la modération"""
+        role = discord.utils.get(ctx.guild.roles, name="Cuisiniers🍴")
+        if role in ctx.author.roles:
+            messages = await ctx.channel.history(limit = nombre + 1).flatten()
+            for message in messages :
+                await message.delete()
+            clear_done = await ctx.send("{} messages ont été effacés avec succès".format(nombre))
+            time.sleep(10)
+            await clear_done.delete()
+        else:
+            await ctx.send("Vous n'avez pas les permissions pour executer cette commande")
