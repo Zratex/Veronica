@@ -60,36 +60,19 @@ class CommandesBasiques(commands.Cog):
         """Permet de print l'argument dans la console en plus de renvoyer l'argument"""
         await ctx.send("Envoyé par {} : {}".format(ctx.author,arg))
         print("Envoyé par {} : {}".format(ctx.author,arg))
-
-    @commands.command()
-    async def clear(self,ctx, nombre : int):
-        """Supprime un certain nombre de messages selon le nombre indiqué. Cette commande est accessible seulement par les membres de la modération"""
-        role = discord.utils.get(ctx.guild.roles, name="Chefs cuisiniers 🍴")
-        if role in ctx.author.roles:
-            messages = await ctx.channel.history(limit = nombre + 1).flatten()
-            for message in messages :
-                await message.delete()
-            clear_done = await ctx.send("{} messages ont été effacés avec succès".format(nombre))
-            time.sleep(10)
-            await clear_done.delete()
-        else:
-            await ctx.send("Vous n'avez pas les permissions pour executer cette commande")
     
     @commands.command()
     async def coin(self,ctx):
         """Cette commande est un coin flip ! Elle vous retourne de façon aléatoire pile ou face"""
-        result=randint(0,1)
-        if result == 0:
+        if randint(0,1):
             await ctx.send("Pile !")
-        elif result == 1:
-            await ctx.send("Face !")
         else:
-            await ctx.send("Erreur ! <@!323147727779397632> help")
+            await ctx.send("Face !")
 
 #-------------------------------------------- EVENT --------------------------------------------
     @commands.command()
     async def event(self,ctx):
-        """Permet d'être notifié quand une information est transmise à propos d'un event organisé sur le serveur"""
+        """Permet d'être notifié quand une information est transmise à propos d'un event organisé sur le serveur. Refaire la commande désactive les notifications"""
         if ctx.channel.id == 397378707960102922 or ctx.channel.id == 397367943769358338:
             role = discord.utils.get(ctx.guild.roles, name="Event")
             if role in ctx.author.roles:
@@ -101,7 +84,7 @@ class CommandesBasiques(commands.Cog):
     
     @commands.command(aliases=['in'])
     async def inscription(self,ctx):
-        """S'inscrit à un certain event"""
+        """Inscrit l'utilisateur qui execute cette commande à l'event de la semaine"""
         if ctx.channel.id == 397378707960102922 or ctx.channel.id == 827971395731324969:
             role = discord.utils.get(ctx.guild.roles, name="Inscrit")
             if role in ctx.author.roles:
@@ -149,7 +132,7 @@ class CommandesBasiques(commands.Cog):
                 time.sleep(5)
                 await ctx.send("Un peu débile comme question non ?")
             elif eightballrandom == 6:
-                await ctx.send("Je n'ai pas l'autorisation de répondre à une tel question <:veropillow:909029139682562108><:veropillow2:909029164240232468>")
+                await ctx.send("Je n'ai pas l'autorisation de répondre à une telle question <:veropillow:909029139682562108><:veropillow2:909029164240232468>")
             elif eightballrandom == 7:
                 await ctx.send("Je n'en suis pas si sûre...")
             elif eightballrandom == 8:
@@ -159,7 +142,7 @@ class CommandesBasiques(commands.Cog):
                 time.sleep(3)
                 await tentative_don.delete()
 
-    @commands.command()
+    @commands.command(aliases=['search'])
     async def google(self,ctx):
         """Permet de faire une recherche rapide sur Google à partir d'une simple commande"""
         txt = ctx.message.content
@@ -186,7 +169,7 @@ class CommandesBasiques(commands.Cog):
                 txt2=txt2+x
         await ctx.channel.send("Voilà le résultat de votre recherche via Wikipédia : https://fr.wikipedia.org/w/index.php?search={}".format(txt2))
         await ctx.channel.send("Si rien ne s'affiche, cela veux dire que ce que vous avez recherché n'existe pas sur Wikipédia. Essayez une simple recherche internet avec ``v.google``")
-    @commands.command()
+    @commands.command(aliases=['def'])
     async def meaning(self,ctx):
         """Permet de faire une recherche rapide sur Urban Dictionnary à partir d'une simple commande"""
         txt = ctx.message.content
@@ -203,12 +186,13 @@ class CommandesBasiques(commands.Cog):
     @commands.command()
     async def gamemode(self,ctx):
         """Cheat code"""
-        await ctx.channel.send("`Java Error occured : Java is not installed in this current system because, man, je suis un Bot Discord pas l'invité de commande MineCraft`")
+        await ctx.channel.send("`Java Error occured : Java is not installed in this current system because, fréro, je suis un Bot Discord pas l'invité de commande MineCraft`")
 
 
     
     @commands.command()
     async def pdp(self,ctx,arg: discord.Member=None):
+        """Affiche la photo de profile d'un utilisateur"""
         embedVar = discord.Embed(color=discord.Color.blue())
         embedVar.set_footer(text="Véronica Alpha 1.2")
         embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar_url))
@@ -219,3 +203,61 @@ class CommandesBasiques(commands.Cog):
             embedVar.add_field(name="{}".format(ctx.author),value="Voici votre photo de profile !", inline=False)
             embedVar.set_image(url="{}".format(ctx.author.avatar_url))
         await ctx.send(embed=embedVar)
+    
+    @commands.command()
+    async def rps(self,ctx,arg=None):
+        """Pouvez vous me battre au Pierre Feuille Ciseaux ?"""
+        if arg == None:
+            await ctx.send("Veuillez choisir entre **Pierre**, **Feuille** et **Ciseaux** !. Il est possible de faire un Best of 3 (premier à 2 victoires gagne) ou 5 (premier à 3 victoires gagne) en mettant comme argument **Bo3** ou **Bo5** !")
+        else:
+            initiation=initiation_convertion(arg) #réponse de l'utilisateur en int
+            if initiation==4:
+                await ctx.send("Vous n'avez pas mis le bon argument !")
+            else:
+                embedVar = discord.Embed(color=discord.Color.blue())
+                embedVar.set_footer(text="Véronica Alpha 1.2")
+                embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar_url))
+                embedVar.add_field(name="Vous avez choisi :",value="{}".format(str_rps(initiation)), inline=True)
+                reply_rps=randint(1,3) #choix aléatoire de la réponse de Véronica
+                embedVar.add_field(name="Véronica a choisi :",value="{}".format(str_rps(reply_rps)), inline=True)
+                result=rps_win(initiation,reply_rps)
+                if result == "Tie":
+                    embedVar.add_field(name="Egalité !",value="{} Vs {}".format(str_rps(initiation),str_rps(reply_rps)), inline=False)
+                elif result:
+                    embedVar.add_field(name="J'ai gagné !",value="{} Vs **{}**".format(str_rps(initiation),str_rps(reply_rps)), inline=False)
+                else:
+                    embedVar.add_field(name="Félicitation ! Vous avez gagné !",value="**{}** Vs {}".format(str_rps(initiation),str_rps(reply_rps)), inline=False)
+                await ctx.send(embed=embedVar)
+                
+                
+# ----- Définitions pour le RPS -----
+def initiation_convertion(arg):
+    """Détermine la réponse de l'utilisateur et la convertie en un nombre entier"""
+    if "rock" in arg.lower() or "pierre" in arg.lower() or "🪨" in arg:
+        return 1
+    elif "paper" in arg.lower() or "sheet" in arg.lower() or "papier" in arg.lower() or "feuille" in arg.lower() or "🧻" in arg:
+        return 2
+    elif "scissors" in arg.lower() or "ciseaux" in arg.lower() or "✂️" in arg:
+        return 3
+    else:
+        return 4
+
+def str_rps(reply):
+    if reply == 1:
+        return "🪨Pierre"
+    elif reply==2:
+        return "🧻Papier"
+    elif reply==3:
+        return "️️️✂️Ciseaux"
+
+def rps_win(init,reply):
+    """Si 0 retourné, le joueur a gagné, si 1 retourné, Véronica a gagné, sinon c'est une égalité"""
+    liste3=[1,2,3]
+    for i in range(len(liste3)):
+        if liste3[i]==init:
+            if liste3[i-1]==reply: #condition de victoire
+                return 0
+            elif init==reply: #condition d'égalité
+                return "Tie"
+            else: #Aucune des autres conditions sont replies, donc condition de défaite
+                return 1
