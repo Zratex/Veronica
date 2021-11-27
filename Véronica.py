@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import Database
 client = commands.Bot(command_prefix = 'v.')
+client.remove_command("help") #la suppression de la commande help permet de ne plus avoir la commande par défaut de Discord.py, mais la personnalisée de l'extension help.py
 
 @client.event
 async def on_ready():
@@ -33,8 +34,11 @@ async def on_message(message):
                     cc=1
         if cc == 1:
             await message.add_reaction("<:Coucou:865883301814599681>") #Le bot ajoute une réaction saluant la personne qui dit bonjour
-            
+        
         auteur = message.author
+        if auteur.id==329554825907798019: #Réponds feur à Kamlox
+            if message.content[-4:].lower() == "quoi" or message.content[-3:].lower() == "koi":
+                await message.channel.send("FEUR")
         if not message.guild:
             channel = await client.fetch_user(323147727779397632)
             await channel.send("Reçu de la part de {}: {}".format(auteur,message.content))
@@ -65,9 +69,20 @@ class MyClient(discord.Client):
 async def load(ctx, name=None):
     """Permet de charger une extension de commandes"""
     if ctx.author.id == 323147727779397632:
-            if name:
+        try:
+            if name=="all": #charge tout les modules
+                client.load_extension("basics")
+                client.load_extension("mod")
+                client.load_extension("money")
+                client.load_extension("data")
+                client.load_extension("rig")
+                client.load_extension("help")
+                await ctx.send("Tout les modules ont été chargés.")
+            elif name: 
                 client.load_extension(name)
-                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été chargé.".format(name))
+                await ctx.send("Le fichier d'extension `{}.py` a bel et bien été chargé.".format(name))
+        except:
+            await ctx.send("Une erreur est survenue lors du chargement de l'extension")
     else:
         await ctx.send("Je n'autorise pas n'importe qui à me toucher !")
 
@@ -78,7 +93,7 @@ async def unload(ctx, name=None):
         try:
             if name:
                 client.unload_extension(name)
-                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été déchargé.".format(name))
+                await ctx.send("Le fichier d'extension `{}.py` a bel et bien été déchargé.".format(name))
         except:
             await ctx.send("Le fichier d'extension `{}.py` n'a pas pu être déchargé (ou il n'existe pas).".format(name))
     else:
@@ -88,16 +103,36 @@ async def unload(ctx, name=None):
 @client.command()
 async def reload(ctx, name=None):
     if ctx.author.id == 323147727779397632:
-        if name:
-            try:
-                client.reload_extension(name)
-                await ctx.send("Le fichier d'extention `{}.py` a bel et bien été rechargé.".format(name))
-            except:
+        try:
+            if name=="all": #recharge tout les modules
+                client.reload_extension("basics")
+                client.reload_extension("mod")
+                client.reload_extension("money")
+                client.reload_extension("data")
+                client.reload_extension("rig")
+                client.reload_extension("help")
+            elif name:
                 try:
-                    client.load_extension(name)
-                    await ctx.send("Le fichier d'extention `{}.py` a bel et bien été chargé.".format(name))
-                except:
-                    await ctx.send("Le fichier d'extension `{}.py` n'a pas pu être rechargé (ou il n'existe pas).".format(name))
+                    client.reload_extension(name)
+                    await ctx.send("Le fichier d'extension `{}.py` a bel et bien été rechargé.".format(name))
+                except: #Erreur si l'extension en question n'est pas déjà chargée
+                    try:
+                        client.load_extension(name)
+                        await ctx.send("Le fichier d'extension `{}.py` a bel et bien été chargé.".format(name))
+                    except: #erreur chargement fichier d'extension
+                        await ctx.send("Le fichier d'extension `{}.py` n'a pas pu être rechargé (ou il n'existe pas).".format(name))
+        except: #Erreur lors du chargement avec l'argument 'all' si les fichiers ne sont pas déjà chargés
+            try:
+                if name=="all": #charge tout les modules
+                    client.load_extension("basics")
+                    client.load_extension("mod")
+                    client.load_extension("money")
+                    client.load_extension("data")
+                    client.load_extension("rig")
+                    client.load_extension("help")
+                    await ctx.send("Tout les modules ont été chargés.")
+            except:
+                await ctx.send("Une erreur est survenue lors du chargement des extensions")
     else:
         await ctx.send("Je n'autorise pas n'importe qui à me toucher !")
 
