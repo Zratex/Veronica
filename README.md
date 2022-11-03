@@ -1,6 +1,6 @@
 # Véronica
 Ce dépôt Github sera le code public de Véronica, que je mettrais de temps en temps à jour pour les curieux d'entre vous qui seraient intéressés par le développement du Bot. Il utilise `discord.py 2.0` pour fonctionner
-## Mises à jours :
+## Mises à jour :
 ### - Alpha 1.2
 L'Alpha 1.2 du bot était sous `Discord.py 1.0`.
 
