@@ -1,8 +1,14 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.utils import get
 
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=323147727779397632) # Zratey#0860 :D
+
+async def addSuggestionsReactions(message):
+    """Ajoute les réactions pour les suggestions"""
+    await message.add_reaction(get(bot.emojis, name="UpVote"))
+    await message.add_reaction(get(bot.emojis, name="DownVote"))
 
 @bot.event
 async def on_ready():
@@ -11,6 +17,11 @@ async def on_ready():
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="moi ! Je ne fais office que de présence 😎"))
     except Exception as a:
         print(a)
+
+@bot.event
+async def on_message(message):
+    if message.channel.id==822037983389679646:
+        await addSuggestionsReactions(message)
 
 @bot.tree.command(name="load",description="Charge un module de commandes. Cette commande n'est utilisable que par Zratey")
 @app_commands.describe(module="Module à charger")
@@ -57,7 +68,7 @@ async def sync(ctx) -> None:
     await ctx.send("Commandes resynchronisées")
     print("Commandes resynchronisées")
 
-filetoken = open(f"C:\\Users\\LENOVO\\Documents\\Véronica\\token.txt", "r")
+filetoken = open("token.txt", "r")
 for x in filetoken:
     token=x
 filetoken.close()
