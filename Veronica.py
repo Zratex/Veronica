@@ -57,7 +57,7 @@ async def sync(ctx) -> None:
     await ctx.send("Commandes resynchronisées")
     print("Commandes resynchronisées")
 
-filetoken = open(f"C:\\Users\\LENOVO\\Documents\\Véronica\\token.txt", "r")
+filetoken = open(f"E:\\Documents\\Véronica\\token.txt", "r")
 for x in filetoken:
     token=x
 filetoken.close()
