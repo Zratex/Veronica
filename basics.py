@@ -5,6 +5,7 @@ from typing import Literal
 
 from time import sleep
 from random import randint
+import json
 
 class Confirm(discord.ui.View):
     def __init__(self):
@@ -24,7 +25,7 @@ class Confirm(discord.ui.View):
     # This one is similar to the confirmation button except sets the inner value to `False`
     @discord.ui.button(label='Cancel', style=discord.ButtonStyle.grey)
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message('Cancelling', ephemeral=True)
+        await interaction.response.send_message('Canceling', ephemeral=True)
         self.value = False
         button.disabled=True
         self.stop()
@@ -57,7 +58,7 @@ class CommandesBasiques(commands.Cog):
     @commands.hybrid_command(name="test",description="Commande de test pour le développeur du bot")
     async def test(self,ctx: commands.Context):
         if ctx.author.id==323147727779397632:
-            BOUTTONS=Counter()
+            BOUTTONS=Confirm()
             await ctx.reply("Test of button :",view=BOUTTONS,ephemeral=True)
             await BOUTTONS.wait() #On attends que l'intéraction du bouton soit terminée avant d'executer la suite
             await ctx.reply("Interaction terminée")
@@ -133,6 +134,18 @@ class CommandesBasiques(commands.Cog):
             embedVar.add_field(name="{}".format(ctx.author),value="Voici votre photo de profil !", inline=False)
             embedVar.set_image(url="{}".format(ctx.author.avatar))
         await ctx.send(embed=embedVar)
+    
+    #STRAWPOLL
+    @commands.hybrid_command(name="poll",description="Génère un sondage à partir du message entré dans la commande")
+    @app_commands.describe(question="Question du sondage")
+    async def poll(self,ctx: commands.Context, question: str):
+        embedVar = discord.Embed(color=discord.Color.blue())
+        embedVar.set_footer(text="Véronica Alpha 1.3")
+        embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
+        embedVar.add_field(name="Suggestion proposée :",value="{}".format(question), inline=False)
+        temp=await ctx.send(embed=embedVar)
+        await temp.add_reaction(self.bot.get_emoji(608326594485944321))
+        await temp.add_reaction(self.bot.get_emoji(608326560906346505))
 
 #-------------------------------------------- RECHERCHES --------------------------------------------
     #GOOGLE
@@ -158,6 +171,7 @@ class CommandesBasiques(commands.Cog):
         await ctx.send("Sa définition n'existe peut être pas sur Urban Dictionnary, donc pourquoi pas faire votre propre recherche ? Essayez la commande ``v.google``",ephemeral=True)
 
 #------------------------------------------- EVENT -----------------------------------------------
+    #Event
     @commands.hybrid_command(name="event",description="Ajoute/retire les notifications (via mention) pour des news à propos d'events sur le serveur")
     async def event(self,ctx):
         """Permet d'être notifié quand une information est transmise à propos d'un event organisé sur le serveur. Refaire la commande désactive les notifications"""
@@ -172,6 +186,7 @@ class CommandesBasiques(commands.Cog):
         else:
             await ctx.send("Ce n'est pas le bon channel pour effectuer cette commande",ephemeral=True)
 
+    #Inscription
     @commands.hybrid_command(name="inscription",description="Vous inscrit a l'event de la semaine",aliases=['in'])
     async def inscription(self,ctx):
         """Inscrit l'utilisateur qui execute cette commande à l'event de la semaine"""
@@ -180,12 +195,72 @@ class CommandesBasiques(commands.Cog):
             if role in ctx.author.roles: #Retire le rôle
                 await ctx.author.remove_roles(role)
                 await ctx.send("Vous êtes désinscrit <@!{}> !".format(ctx.author.id))
+                #Retire la personne de la liste des inscrits :
+                if not inscription_remove(ctx.author.id):
+                    #Cela veut dire que la personne n'était déjà plus dans la liste
+                    await ctx.send("Vous ne figuriez déjà pas dans la liste des inscrits avant votre inscription. Etrange..")
             else: #Ajoute le rôle
                 await ctx.send("Vous êtes désormais inscrit à l'événement de la semaine <@!{}> !".format(ctx.author.id))
                 await ctx.author.add_roles(role)
+                #Ajoute l'utilisateur dans la liste des inscrits
+                if not inscription_add(ctx.author.id):
+                    #Cela veut dire que la personne était déjà dans la liste
+                    await ctx.send("Vous étiez déjà dans la liste des inscrits ? Etrange..")
         else:
             await ctx.send("Ce n'est pas le bon channel pour effectuer cette commande",ephemeral=True)
+    
+    #Inscription Clear
+    @commands.hybrid_command(name="inscription_clear",description="Retire à tout les inscrits listés, leur rôle inscrit et check in")
+    async def inscription_clear(self,ctx):
+        role = discord.utils.get(ctx.guild.roles, name="🍳Goûteur")
+        if role in ctx.author.roles:
+            guild=self.bot.get_guild(397332012542853122)
+            with open("liste_inscrits.json") as f:
+                temp = json.load(f)
+            rapport=""
+            for i in range(len(temp["IDs_list"])):
+                membre = guild.get_member(temp["IDs_list"][i])
+                try:
+                    await membre.remove_roles(discord.utils.get(ctx.guild.roles, name="Inscrit"))
+                    rapport += "- ⏬ <@!{}> n'a désormais plus le rôle inscrit\n".format(temp["IDs_list"][i])
+                except:
+                    rapport += "- <@!{}> n'avait pas le rôle Inscrit\n".format(temp["IDs_list"][i])
+                try:
+                    await membre.remove_roles(discord.utils.get(ctx.guild.roles, name="Checked in"))
+                    rapport += "- ⏬ <@!{}> n'a désormais plus le rôle checked in\n".format(temp["IDs_list"][i])
+                except:
+                    rapport += "- <@!{}> n'avait pas le rôle Checked in\n".format(temp["IDs_list"][i])
+            #On efface tout dans le fichier texte :
+            temp["IDs_list"]=[]
+            with open("liste_inscrits.json","w") as f:
+                json.dump(temp,f)
+            await ctx.send("Les participants n'ont plus leurs rôles de participation à l'event!")
+            embedVar = discord.Embed(color=discord.Color.blue())
+            embedVar.set_footer(text="Véronica Alpha 1.3")
+            embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
+            embedVar.add_field(name="Rapport de la commande :",value="{}".format(rapport), inline=False)
+            await ctx.send(embed=embedVar)
+        else:
+            await ctx.send("Vous n'avez pas la permission d'executer cette commande!")
+    
+    #Liste Inscrits
+    @commands.hybrid_command(name="liste_inscrits",description="Liste les personnes inscrites à l'événement de la semaine")
+    async def liste_inscrits(self,ctx):
+        with open("liste_inscrits.json") as f:
+            temp = json.load(f)
+        if not len(temp["IDs_list"]): #Si il n'y a pas d'inscrits
+            await ctx.send("Il n'y a pas d'inscrit pour l'événement de cette semaine")
+        else:
+            embedVar = discord.Embed(color=discord.Color.blue())
+            embedVar.set_footer(text="Véronica Alpha 1.3")
+            embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
+            liste=""
+            for i in range(len(temp["IDs_list"])):
+                liste=liste+"- <@!"+str(temp["IDs_list"][i])+">\n"
+            embedVar.add_field(name="Liste des participants :",value="{}".format(liste), inline=False)
+            await ctx.send(embed=embedVar)
 
+    #Here
     @commands.hybrid_command(name="here",description="[CHECK-IN] : Confirme votre présence à l'event de la semaine")
     async def here(self,ctx):
         """Le check in du bot"""
@@ -201,17 +276,16 @@ class CommandesBasiques(commands.Cog):
                     await ctx.author.remove_roles(role)
                 else:
                     await ctx.send("Soyez sur d'être inscrit avant de confirmer votre présence. Pour vous inscrire, effectuez la commande </inscription:1037315937025654804>")
-    
+    """
     @commands.hybrid_command(name="rps",description="Jouez à Pierre Feuille Ciseaux contre moi !")
     @app_commands.describe(choix="Chosissez entre Pierre, Feuille et Ciseaux")
     async def rps(self,ctx,choix: Literal['🪨rock',"🧻paper","✂️scissors"]):
-        """Pouvez vous me battre au Pierre Feuille Ciseaux ?"""
         initiation=initiation_convertion(choix) #réponse de l'utilisateur en int
         if initiation==4:
             await ctx.send("Vous n'avez pas mis le bon argument !")
         else:
             embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.2")
+            embedVar.set_footer(text="Véronica Alpha 1.3")
             embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
             embedVar.add_field(name="Vous avez choisi :",value="{}".format(str_rps(initiation)), inline=True)
             reply_rps=randint(1,3) #choix aléatoire de la réponse de Véronica
@@ -224,7 +298,7 @@ class CommandesBasiques(commands.Cog):
             else:
                 embedVar.add_field(name="Félicitation ! Vous avez gagné !",value="**{}** Vs {}".format(str_rps(initiation),str_rps(reply_rps)), inline=False)
             await ctx.send(embed=embedVar)
-        
+    """
 async def setup(bot):
     await bot.add_cog(CommandesBasiques(bot))
 
@@ -259,3 +333,27 @@ def rps_win(init,reply):
                 return "Tie"
             else: #Aucune des autres conditions sont replies, donc condition de défaite
                 return 1
+
+# ----- Définitions pour les listes d'inscription -----
+def inscription_remove(id)->bool:
+    with open("liste_inscrits.json","r") as f:
+        temp = json.load(f)
+    if id in temp["IDs_list"]:
+        temp["IDs_list"].remove(id)
+        with open("liste_inscrits.json","w") as f:
+            json.dump(temp,f)
+        return True
+    else:
+        return False
+
+def inscription_add(id)->bool:
+    with open("liste_inscrits.json","r") as f:
+        temp = json.load(f)
+    if id not in temp["IDs_list"]:
+        temp["IDs_list"].append(id)
+        with open("liste_inscrits.json","w") as f:
+            json.dump(temp,f)
+        return True
+    else:
+        #La personnes est déjà dans la liste des inscrits ?
+        return False
