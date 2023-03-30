@@ -170,6 +170,20 @@ class CommandesBasiques(commands.Cog):
         await ctx.send("Voilà le résultat de votre recherche via Urban Dictionnary : https://www.urbandictionary.com/define.php?term={}".format(content))
         await ctx.send("Sa définition n'existe peut être pas sur Urban Dictionnary, donc pourquoi pas faire votre propre recherche ? Essayez la commande ``v.google``",ephemeral=True)
 
+    #Viewer
+    @commands.hybrid_command(name="viewer",description="Ajoute/retire les notifications (via mention) pour des news à propos de streams sur Twitch")
+    async def viewer(self,ctx):
+        """Permet d'être notifié quand une information est transmise à propos d'un stream. Refaire la commande désactive les notifications"""
+        if ctx.channel.id == 397378707960102922 or ctx.channel.id == 397367943769358338:
+            role = discord.utils.get(ctx.guild.roles, name="Viewer")
+            if role in ctx.author.roles: #Retire le rôle
+                await ctx.author.remove_roles(role)
+                await ctx.send("Vous ne recevrez plus de notifications pour les streams !")
+            else: #Ajoute le rôle
+                await ctx.send("Vous avez obtenu le role Viewer <@!{}> ! Vous serez ping à chaque fois qu'un membre du serveur lancera un stream :)".format(ctx.author.id))
+                await ctx.author.add_roles(role)
+        else:
+            await ctx.send("Ce n'est pas le bon channel pour effectuer cette commande",ephemeral=True)
 #------------------------------------------- EVENT -----------------------------------------------
     #Event
     @commands.hybrid_command(name="event",description="Ajoute/retire les notifications (via mention) pour des news à propos d'events sur le serveur")
