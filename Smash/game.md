@@ -3,6 +3,9 @@ Pour l'instant il n'y a pas de nom au jeu en lui même, donc ce sera Smash Game 
 
 Ce fichier markdown est présent pour expliquer les règles du jeu en soit, et comment est ce qu'est agencé ce dossier dédié au jeu.
 
+## Smash.py
+Le fichier `Smash.py` est le fichier où se trouve les commandes Discord à propos du jeu.
+
 ## Base de donnée
 Toute la base de donnée relative au bon fonctionnement du jeu est stocké sur la base de donnée générale du bot. Il y a 2 tables prévues pour le moment :
 - `smash` : Table dédié aux statistiques des personnages. Pour plus d'informations sur son contenu, il faut check la partie du doc dédié aux **Smasher**

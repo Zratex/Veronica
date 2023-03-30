@@ -3,6 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=323147727779397632) # Zratey#0860 :D
+# Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
+listOfCogs={"Smash.smash": ["smash","smash.smash"],"Tests.test": ["test","tests"],"account":"account","basics":"basics"}
 
 @bot.event
 async def on_ready():
@@ -17,8 +19,9 @@ async def on_ready():
 async def load(interaction: discord.Interaction, module: str):
     if interaction.user.id==323147727779397632:
         try:
+            module = [k for k, v in listOfCogs.items() if module.lower() in v][0] #One liner fait fait ChatGPT permettant d'avoir la clé à partir d'une valeur
             await bot.load_extension(module)
-            await interaction.response.send_message(f"L'extension {module} a bel et bien été chargée !",ephemeral=False)
+            await interaction.response.send_message(f"L'extension `{module}` a bel et bien été chargée !",ephemeral=False)
         except Exception as a:
             await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module {module} : `{a}`",ephemeral=False)
     else:
@@ -29,8 +32,9 @@ async def load(interaction: discord.Interaction, module: str):
 async def reload(interaction: discord.Interaction, module: str):
     if interaction.user.id==323147727779397632:
         try:
+            module = [k for k, v in listOfCogs.items() if module.lower() in v][0] #One liner fait fait ChatGPT permettant d'avoir la clé à partir d'une valeur
             await bot.reload_extension(module)
-            await interaction.response.send_message(f"L'extension {module} a bel et bien été rechargée !",ephemeral=False)
+            await interaction.response.send_message(f"L'extension `{module}` a bel et bien été rechargée !",ephemeral=False)
         except Exception as a:
             await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module {module} : `{a}`",ephemeral=False)
     else:
@@ -41,8 +45,9 @@ async def reload(interaction: discord.Interaction, module: str):
 async def unload(interaction: discord.Interaction, module: str):
     if interaction.user.id==323147727779397632:
         try:
+            module = [k for k, v in listOfCogs.items() if module.lower() in v][0] #One liner fait fait ChatGPT permettant d'avoir la clé à partir d'une valeur
             await bot.unload_extension(module)
-            await interaction.response.send_message(f"L'extension {module} a bel et bien été déchargée !",ephemeral=False)
+            await interaction.response.send_message(f"L'extension `{module}` a bel et bien été déchargée !",ephemeral=False)
         except Exception as a:
             await interaction.response.send_message(f"Une erreur est survenue en essayant de décharger le module {module} : `{a}`",ephemeral=False)
     else:
