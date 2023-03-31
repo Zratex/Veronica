@@ -4,7 +4,7 @@ from discord.ext import commands
 
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=323147727779397632) # Zratey#0860 :D
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
-listOfCogs={"Smash.smash": ["smash","smash.smash"],"Tests.test": ["test","tests"],"account":"account","basics":"basics"}
+listOfCogs={"Smash.smash": ["smash","smash.smash"],"Tests.test": ["test","tests"],"account":"account","basics":"basics","listener":"listener","xp":"xp","mod":["mod","jail","moderation","modo"]}
 
 @bot.event
 async def on_ready():
@@ -52,6 +52,17 @@ async def unload(interaction: discord.Interaction, module: str):
             await interaction.response.send_message(f"Une erreur est survenue en essayant de décharger le module {module} : `{a}`",ephemeral=False)
     else:
         await interaction.response.send_message("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
+
+@bot.event
+async def on_command_error(ctx,error):
+    erreur=getattr(error,'original',error)
+    if isinstance(erreur,commands.CommandNotFound):
+        await ctx.send("La commande que vous avez essayé d'entrer **n'existe pas**, ou le module associé n'a pas été chargé <:zeldashrug:914140291802464258>")
+    elif isinstance(erreur,commands.MissingRequiredArgument):
+        await ctx.send("Il manque un argument à la commande, essayez de nouveau peut être ?")
+    else:
+        print("Erreur dans le channel {} par {} :\n{}".format(ctx.channel,ctx.author,error))
+        await ctx.send("Une erreur est survenue lors de votre tentative d'execution de la commande. Veuillez faire un report de bug dans le salon <#836700382138859540>\n__Voici l'erreur en question :__\n```{}```".format(error))
 
 # --- Commande de synchronysation des commandes '/' ---
 @bot.command() #Commande sans '/'

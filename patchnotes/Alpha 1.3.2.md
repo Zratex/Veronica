@@ -4,5 +4,8 @@ Les Modules de commandes se retrouvent désormais dans des dossiers différent, 
 
 Donc les modules sont indexés dans une variable avant même leur chargement.
 
+## Jeu : 0.2
+Ajout d'un affichage graphique dynamique des statistiques des personnages dans la commande `smasher_info`. Il est prévu qu'une imprémentation des artwork des personnages soient mis tout comme Akuma.
+
 ## Dossier Tests
 Dossier dédié à mes tests, au lieu de trainer un peu partout..

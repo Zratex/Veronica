@@ -65,7 +65,7 @@ async def setup(bot):
     await bot.add_cog(Smash(bot))
 
 #Enregistrement dans une variable de la version actuelle du jeu
-version = "0.1"
+version = "0.2"
 
 def properNumber(num):
     """Convertie le code identifiant le personnage en quelque chose de plus lisible. E indiquant un echo fighter.
@@ -93,7 +93,7 @@ def image_generator(perso):
     if perso.getName() == "Akuma":
         temp=Image.open("Smash\\Media\\Akuma\\AkumaShunGokuTatsu.gif").convert("RGBA")
         temp=temp.resize((int(temp.size[0]*4.5),int(temp.size[1]*4.5)))
-        result.alpha_composite(temp,(200,0))
+        result.alpha_composite(temp,(400,0))
 
     font = ImageFont.truetype("arial.ttf", size=55)
     draw = ImageDraw.Draw(result)
@@ -111,27 +111,26 @@ def image_generator(perso):
 
     font = ImageFont.truetype("arial.ttf", size=40)
     draw.text((5,200),"PV :",fill=(255,255,255),font=font)
-    draw_stat((perso.getPV()/150)*100,result,(150,200))
-    draw.text((625,200),"{}".format(perso.getPV()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat((perso.getPV()/150)*100,result,(200,200))
+    draw.text((675,200),"{}".format(perso.getPV()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,300),"ATK :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getAttack(),result,(150,300))
-    draw.text((625,300),"{}".format(perso.getAttack()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat(perso.getAttack(),result,(200,300))
+    draw.text((675,300),"{}".format(perso.getAttack()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,400),"DEF :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getDefense(),result,(150,400))
-    draw.text((625,400),"{}".format(perso.getDefense()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat(perso.getDefense(),result,(200,400))
+    draw.text((675,400),"{}".format(perso.getDefense()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,500),"SPE :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getSpeed(),result,(150,500))
-    draw.text((625,500),"{}".format(perso.getSpeed()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat(perso.getSpeed(),result,(200,500))
+    draw.text((675,500),"{}".format(perso.getSpeed()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,600),"DEX :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getDexterity(),result,(150,600))
-    draw.text((625,600),"{}".format(perso.getDexterity()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat(perso.getDexterity(),result,(200,600))
+    draw.text((675,600),"{}".format(perso.getDexterity()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,700),"Reach :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getReach()*10,result,(150,700))
-    draw.text((625,700),"{}".format(perso.getReach()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
+    draw_stat(perso.getReach()*10,result,(200,700))
+    draw.text((675,700),"{}".format(perso.getReach()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
     draw.text((5,800),"Alt Dmg :",fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    draw_stat(perso.getAltDMG()*2,result,(150,800))
-    draw.text((625,800),"{}".format(perso.getAltDMG()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
-    
+    draw_stat(perso.getAltDMG()*2,result,(200,800))
+    draw.text((675,800),"{}".format(perso.getAltDMG()),fill=(255,255,255),font=font,stroke_width=2, stroke_fill="black")
 
     result.save("Smash/Media/Stats.png","PNG")
 
