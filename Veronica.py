@@ -4,7 +4,14 @@ from discord.ext import commands
 
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=323147727779397632) # Zratey#0860 :D
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
-listOfCogs={"Smash.smash": ["smash","smash.smash"],"Tests.test": ["test","tests"],"account":"account","basics":"basics","listener":"listener","xp":"xp","mod":["mod","jail","moderation","modo"]}
+listOfCogs={"Smash.smash": ["smash","smash.smash"],
+            "Tests.test": ["test","tests"],
+            "Basic_Modules.account":"account",
+            "Basic_Modules.basics":"basics",
+            "Basic_Modules.listener":"listener",
+            "Basic_Modules.xp":"xp",
+            "Basic_Modules.mod":["mod","jail","moderation","modo"],
+            "rps.rps":["rock paper scissors","pierre feuille ciseaux","rps"]}
 
 @bot.event
 async def on_ready():
@@ -23,7 +30,10 @@ async def load(interaction: discord.Interaction, module: str):
             await bot.load_extension(module)
             await interaction.response.send_message(f"L'extension `{module}` a bel et bien été chargée !",ephemeral=False)
         except Exception as a:
-            await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module {module} : `{a}`",ephemeral=False)
+            if type(a) == IndexError:
+                await interaction.response.send_message(f"Le module **{module}** n'existe pas, ou n'a pas été trouvé")
+            else:
+                await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module **{module}** : `{a}`",ephemeral=False)
     else:
         await interaction.response.send_message("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
 
@@ -36,7 +46,10 @@ async def reload(interaction: discord.Interaction, module: str):
             await bot.reload_extension(module)
             await interaction.response.send_message(f"L'extension `{module}` a bel et bien été rechargée !",ephemeral=False)
         except Exception as a:
-            await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module {module} : `{a}`",ephemeral=False)
+            if type(a) == IndexError:
+                await interaction.response.send_message(f"Le module **{module}** n'existe pas, ou n'a pas été trouvé")
+            else:
+                await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module {module} : `{a}`",ephemeral=False)
     else:
         await interaction.response.send_message("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
 
@@ -49,7 +62,10 @@ async def unload(interaction: discord.Interaction, module: str):
             await bot.unload_extension(module)
             await interaction.response.send_message(f"L'extension `{module}` a bel et bien été déchargée !",ephemeral=False)
         except Exception as a:
-            await interaction.response.send_message(f"Une erreur est survenue en essayant de décharger le module {module} : `{a}`",ephemeral=False)
+            if type(a) == IndexError:
+                await interaction.response.send_message(f"Le module **{module}** n'existe pas, ou n'a pas été trouvé")
+            else:
+                await interaction.response.send_message(f"Une erreur est survenue en essayant de décharger le module {module} : `{a}`",ephemeral=False)
     else:
         await interaction.response.send_message("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
 
@@ -67,7 +83,7 @@ async def on_command_error(ctx,error):
 # --- Commande de synchronysation des commandes '/' ---
 @bot.command() #Commande sans '/'
 @commands.guild_only()
-@commands.is_owner() #Utilisable que par Zratey, the last knight pour une raison que j'ignore
+@commands.is_owner()
 async def sync(ctx) -> None:
     await ctx.bot.tree.sync()
     await ctx.send("Commandes resynchronisées")

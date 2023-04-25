@@ -83,7 +83,7 @@ def properNumber(num):
 def image_generator(perso):
     """Ajoute l'icône du personnage sur un fond"""
     from PIL import Image, ImageDraw, ImageFont
-    fond=Image.open("Tests\\test.png")
+    fond=Image.open("Smash\\Media\\killingmoonfontinfo.png")
     Stock=Image.open("Smash\\Media\\Stock Icons\\{}.png".format(perso.getName()))
     width1, height1 = fond.size
     Stock=Stock.resize((128,128))

@@ -30,16 +30,13 @@ class Test(commands.Cog):
 #TEST COMMAND
     @commands.hybrid_command(name="test",description="Commande de test pour le développeur du bot")
     async def test(self,ctx: commands.Context):
-        if ctx.author.id==323147727779397632:
-            embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.3")
-            embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
-            from Smash import smasher
-            #Ajout visuel :
-            file = []
-            file.append(discord.File("Tests/Image.png",filename='image.png'))
-            embedVar.set_image(url="attachment://image.png")
-            await ctx.send(files=file,embed=embedVar)
+        if ctx.author.id==323147727779397632 or ctx.author.id==376321007583232002:
+            init_message = await ctx.send("Création du thread de test") #Message de création du thread
+            thread = await init_message.create_thread(name="Thread test",auto_archive_duration=60,reason="Test thread creation") #Création du thread
+            message = self.bot.get_channel(thread.id) #Acquisition de la capacité à écrire dans le thread
+            await message.send("Message dans le thread là ouais")
+            await message.send(f"<#{ctx.channel.id}>")
+            #await thread.edit(archived=True) #Archive le channel
         else:
             await ctx.reply("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
 
