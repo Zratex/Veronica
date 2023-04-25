@@ -3,7 +3,8 @@ from discord.ext import commands
 from discord import app_commands
 
 from random import randint
-from rpsFunctions import * #Importation des fonctions nécessaires au bout fonctionnement du RPS
+from .rpsFunctions import * #Importation des fonctions nécessaires au bout fonctionnement du RPS.
+#Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
 
 class RPS(commands.Cog):
     def __init__(self, bot):
