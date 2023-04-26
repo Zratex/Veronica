@@ -2,7 +2,18 @@
 import sqlite3
 import datetime
 
-con = sqlite3.connect("E:\\Documents\\Véronica\\Veronica\\Database\\Veronica.db")
+import os
+# Obtenir le chemin absolu du répertoire contenant database.py
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Construire le chemin relatif vers le fichier de base de données
+db_path = os.path.join(current_dir, '..', 'Database', 'Veronica.db')
+# Établir une connexion à la base de données
+con = sqlite3.connect(db_path)
+"""
+Ici, os.path.abspath(__file__) renvoie le chemin absolu complet du fichier database.py.
+os.path.dirname extrait le chemin absolu du répertoire contenant database.py, qui est Veronica/Database dans ce cas.
+os.path.join est utilisé pour construire un chemin relatif en utilisant les deux points (..) pour remonter d'un répertoire et atteindre le fichier de base de données.
+"""
 
 # --- Fonctions basiques de communication avec la base de donnée ---
 def createUser(id:int)->int:
@@ -261,7 +272,15 @@ def ShowStockGraph():
     plt.xlabel('Temps')
     plt.ylabel('Coquillettes de la Banque Centrale')
     plt.title("Stock de coquillettes en fonction du temps")
-    plt.savefig('MoneyStockGraph.png')
+
+    # Chemin relatif de la sortie souhaitée
+    output_path = '../economy/MoneyStockGraph.png'
+    # Obtenir le chemin absolu du répertoire courant
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    # Combiner les chemins pour obtenir le chemin absolu de la sortie souhaitée
+    output_full_path = os.path.join(current_dir, output_path)
+    # Créer le graphique et enregistrer la sortie au chemin absolu
+    plt.savefig(output_full_path)
 def ShowJetonGraph():
     import matplotlib.pyplot as plt
     x=[] #Absice du temps
@@ -275,7 +294,15 @@ def ShowJetonGraph():
     plt.xlabel('Temps')
     plt.ylabel('Valeur du Conchiglie')
     plt.title("Valeur du Conchiglie en fonction du temps")
-    plt.savefig('graph_jeton.png')
+
+    # Chemin relatif de la sortie souhaitée
+    output_path = '../economy/graph_jeton.png'
+    # Obtenir le chemin absolu du répertoire courant
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    # Combiner les chemins pour obtenir le chemin absolu de la sortie souhaitée
+    output_full_path = os.path.join(current_dir, output_path)
+    # Créer le graphique et enregistrer la sortie au chemin absolu
+    plt.savefig(output_full_path)
 
 # --- Autres fonctions de communication avec la table user ---
 def getUserLootbox(id:int)->int:

@@ -51,7 +51,7 @@ class RPS(commands.Cog):
                     newMSG=self.bot.get_channel(ctx.channel.id) #je suis obligé de faire en sorte de re-récupérer le channel pour faire un nouveau message
                     #Afin de pouvoir faire un thread correctement :
                     init_message = await newMSG.send(f"RPS 1V1 Battle\n```{ctx.author} VS. {user}```") #Message de création du thread
-                    thread = await init_message.create_thread(name=f"RPS : {ctx.author} VS. {user} | {currenttime()}",auto_archive_duration=60,reason="1v1 RPS of {ctx.author} VS. {user}") #Création du thread
+                    thread = await init_message.create_thread(name=f"RPS : {currenttime()} | {ctx.author} VS. {user}",auto_archive_duration=60,reason="1v1 RPS of {ctx.author} VS. {user}") #Création du thread
                     message = self.bot.get_channel(thread.id) #Acquisition de la capacité à écrire dans le thread
                     BUTTONS=rpsVersus(ctx,user,message) #On met les boutons pour sélectionner le stuff
                     await message.send(f"```diff\n- Let the battle begins !```\n{ctx.author.mention} VS. {user.mention}",embed=embedVar,view=BUTTONS)

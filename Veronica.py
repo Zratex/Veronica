@@ -6,12 +6,14 @@ bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=323147
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
 listOfCogs={"Smash.smash": ["smash","smash.smash"],
             "Tests.test": ["test","tests"],
-            "Basic_Modules.account":"account",
+            "account.account":"account",
             "Basic_Modules.basics":"basics",
             "Basic_Modules.listener":"listener",
             "Basic_Modules.xp":"xp",
             "Basic_Modules.mod":["mod","jail","moderation","modo"],
-            "rps.rps":["rock paper scissors","pierre feuille ciseaux","rps"]}
+            "rps.rps":["rock paper scissors","pierre feuille ciseaux","rps"],
+            "economy.shop":["shop","boutique"],
+            "economy.economy_graph":["graphe économique","graph eco","eco graph","économique graphique","graphique économique"]}
 
 @bot.event
 async def on_ready():
@@ -71,14 +73,17 @@ async def unload(interaction: discord.Interaction, module: str):
 
 @bot.event
 async def on_command_error(ctx,error):
+    import traceback
+    import sys
     erreur=getattr(error,'original',error)
     if isinstance(erreur,commands.CommandNotFound):
         await ctx.send("La commande que vous avez essayé d'entrer **n'existe pas**, ou le module associé n'a pas été chargé <:zeldashrug:914140291802464258>")
     elif isinstance(erreur,commands.MissingRequiredArgument):
         await ctx.send("Il manque un argument à la commande, essayez de nouveau peut être ?")
     else:
-        print("Erreur dans le channel {} par {} :\n{}".format(ctx.channel,ctx.author,error))
-        await ctx.send("Une erreur est survenue lors de votre tentative d'execution de la commande. Veuillez faire un report de bug dans le salon <#836700382138859540>\n__Voici l'erreur en question :__\n```{}```".format(error))
+        print("Erreur dans le channel {} par {} :\n{}".format(ctx.channel,ctx.author,erreur))
+        await ctx.send("Une erreur est survenue lors de votre tentative d'execution de la commande. Veuillez faire un report de bug dans le salon <#836700382138859540>\n__Voici l'erreur en question :__\n```{}```".format(erreur))
+        traceback.print_exception(type(erreur), erreur, erreur.__traceback__, file=sys.stderr)
 
 # --- Commande de synchronysation des commandes '/' ---
 @bot.command() #Commande sans '/'
