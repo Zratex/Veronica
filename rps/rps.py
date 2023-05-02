@@ -167,61 +167,73 @@ class rpsVersus(discord.ui.View):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 1 #Rock
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.ctx.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !", ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=1 #Rock
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !", ephemeral=True)
+        else:
+            return await interaction.response.defer()
+            
         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             rock_button.style = discord.ButtonStyle.green
             rock_button.disabled=True
             await interaction.response.edit_message(view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
+
     @discord.ui.button(label='Paper 🧻', style=discord.ButtonStyle.grey)
     async def paper(self, interaction: discord.Interaction, paper_button: discord.ui.Button):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 2 #Paper
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !", ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=2 #Paper
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !", ephemeral=True)
+        else:
+            return await interaction.response.defer()
+
         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             paper_button.style = discord.ButtonStyle.green
             paper_button.disabled=True
             await interaction.response.edit_message(view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
+
     @discord.ui.button(label='Scissors ✂️', style=discord.ButtonStyle.grey)
     async def scissors(self, interaction: discord.Interaction, scissors_button: discord.ui.Button):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 3 #Scissors
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !", ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=3 #Scissors
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
-        #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !", ephemeral=True)
+        else:
+            return await interaction.response.defer()
+            
+         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             scissors_button.style = discord.ButtonStyle.green
             scissors_button.disabled=True
             await interaction.response.edit_message(view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
+
     @discord.ui.button(label='Cancel ❌', style=discord.ButtonStyle.grey)
     async def cancel(self, interaction: discord.Interaction, cancel_button: discord.ui.Button):
         if interaction.user.id==self.ctx.author.id or interaction.user.id==self.p2id.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
@@ -230,3 +242,5 @@ class rpsVersus(discord.ui.View):
             cancel_button.disabled=True
             await interaction.response.edit_message(view=self) #Actualise le bouton
             self.stop()
+         else:
+            await interaction.response.defer()
