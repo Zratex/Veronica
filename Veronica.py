@@ -13,7 +13,8 @@ listOfCogs={"Smash.smash": ["smash","smash.smash"],
             "Basic_Modules.mod":["mod","jail","moderation","modo"],
             "rps.rps":["rock paper scissors","pierre feuille ciseaux","rps"],
             "economy.shop":["shop","boutique"],
-            "economy.economy_graph":["graphe économique","graph eco","eco graph","économique graphique","graphique économique"]}
+            "economy.economy_graph":["economy_graph","economy graph","ecograph","graphe économique","graph eco","eco graph","économique graphique","graphique économique"],
+            "account.lootbox":["lootbox","box","boite"]}
 
 @bot.event
 async def on_ready():

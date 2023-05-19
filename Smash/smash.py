@@ -12,6 +12,8 @@ from Smash import attacks
 class Smash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        from Version import version
+        self.version=version()
     
     @commands.hybrid_command(name="smasher_info",description="Retourne les informations relatives par rapport à un personnage",num="Index du personnage à rechercher")
     async def smasher_info(self,ctx,num):
@@ -27,7 +29,7 @@ class Smash(commands.Cog):
                 if num in database.getListCharacter():
                     perso=smasher.Smasher(num)
                     embedVar = discord.Embed(color=discord.Color.brand_red()) #En rouge pour différencier des autres modules du bot
-                    embedVar.set_footer(text="Véronica Alpha 1.3 - Game version : {}".format(version))
+                    embedVar.set_footer(text="{} - Game version : {}".format(self.version,gameversion),icon_url=f"{self.bot.user.avatar}")
                     embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
                     #Valeurs de l'embed :
                     embedVar.add_field(name="Nom :",value="{} ({})".format(perso.getName(),properNumber(perso.getNumber())),inline=False)
@@ -65,7 +67,7 @@ async def setup(bot):
     await bot.add_cog(Smash(bot))
 
 #Enregistrement dans une variable de la version actuelle du jeu
-version = "0.2"
+gameversion = "0.2"
 
 def properNumber(num):
     """Convertie le code identifiant le personnage en quelque chose de plus lisible. E indiquant un echo fighter.

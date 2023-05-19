@@ -91,7 +91,8 @@ class CommandesBasiques(commands.Cog):
     async def pdp(self,ctx,arg: discord.Member=None):
         """Affiche la photo de profil d'un utilisateur"""
         embedVar = discord.Embed(color=discord.Color.blue())
-        embedVar.set_footer(text="Véronica Alpha 1.3")
+        from Version import version
+        embedVar.set_footer(text=version(),icon_url=f"{self.bot.user.avatar}")
         embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
         if arg != None:
             embedVar.add_field(name="{}".format(arg),value="Photo de profil de {} !".format(arg), inline=False)
@@ -106,7 +107,8 @@ class CommandesBasiques(commands.Cog):
     @app_commands.describe(question="Question du sondage")
     async def poll(self,ctx: commands.Context, question: str):
         embedVar = discord.Embed(color=discord.Color.blue())
-        embedVar.set_footer(text="Véronica Alpha 1.3")
+        from Version import version
+        embedVar.set_footer(text=version(),icon_url=f"{self.bot.user.avatar}")
         embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
         embedVar.add_field(name="Suggestion proposée :",value="{}".format(question), inline=False)
         temp=await ctx.send(embed=embedVar)
@@ -216,7 +218,8 @@ class CommandesBasiques(commands.Cog):
                 json.dump(temp,f)
             await ctx.send("Les participants n'ont plus leurs rôles de participation à l'event!")
             embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.3")
+            from Version import version
+            embedVar.set_footer(text=version(),icon_url=f"{self.bot.user.avatar}")
             embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
             embedVar.add_field(name="Rapport de la commande :",value="{}".format(rapport), inline=False)
             await ctx.send(embed=embedVar)
@@ -232,7 +235,8 @@ class CommandesBasiques(commands.Cog):
             await ctx.send("Il n'y a pas d'inscrit pour l'événement de cette semaine")
         else:
             embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.3")
+            from Version import version
+            embedVar.set_footer(text=version(),icon_url=f"{self.bot.user.avatar}")
             embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
             liste=""
             for i in range(len(temp["IDs_list"])):

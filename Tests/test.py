@@ -27,16 +27,17 @@ class Confirm(discord.ui.View):
 class Test(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        from Version import	version
+        self.version=version()
 #TEST COMMAND
     @commands.hybrid_command(name="test",description="Commande de test pour le développeur du bot")
     async def test(self,ctx: commands.Context):
         if ctx.author.id==323147727779397632 or ctx.author.id==376321007583232002:
-            init_message = await ctx.send("Création du thread de test") #Message de création du thread
-            thread = await init_message.create_thread(name="Thread test",auto_archive_duration=60,reason="Test thread creation") #Création du thread
-            message = self.bot.get_channel(thread.id) #Acquisition de la capacité à écrire dans le thread
-            await message.send("Message dans le thread là ouais")
-            await message.send(f"<#{ctx.channel.id}>")
-            #await thread.edit(archived=True) #Archive le channel
+            embedVar = discord.Embed(color=discord.Color.blue())
+            embedVar.set_footer(text=self.version,icon_url=f"{self.bot.user.avatar}")
+            embedVar.set_author(name="Commande réalisée par {}".format(ctx.author),icon_url=f"{ctx.author.avatar}")
+            embedVar.add_field(name="Test",value="```test là``` Oui **c'**est un test du *formatage* Markdown au sein des `embed` Discord")
+            await ctx.send(embed=embedVar)
         else:
             await ctx.reply("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
 

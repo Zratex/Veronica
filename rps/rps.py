@@ -9,6 +9,8 @@ from .rpsFunctions import * #Importation des fonctions nécessaires au bout fonc
 class RPS(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        from Version import version
+        self.version=version()
     
     #TEST COMMAND
     @commands.hybrid_command(name="rps",description="Jouez à Pierre Feuille Ciseaux !")
@@ -16,7 +18,7 @@ class RPS(commands.Cog):
     async def rps(self,ctx: commands.Context,user: discord.Member=None):
         if user==None or user.id!=ctx.author.id:
             embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.3")
+            embedVar.set_footer(text=self.version,icon_url=f"{self.bot.user.avatar}")
             embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
             if user==None or user.id==752958545758126082: #L'ID de Véronica
                 embedVar.add_field(name="Veronica VS Human",value="Azy, je te laisse faire ta sélection en premier. Prends juste en considération que ta défaite est évidente <:ZeldaMenacing:1099801907658248323>", inline=False)
@@ -28,7 +30,7 @@ class RPS(commands.Cog):
                 else:
                     #On regénère une nouvelle embed : Le résultat du match
                     embedVar = discord.Embed(color=discord.Color.blue())
-                    embedVar.set_footer(text="Véronica Alpha 1.3")
+                    embedVar.set_footer(text=self.version,icon_url=f"{self.bot.user.avatar}")
                     choice=randint(1,3)
                     embedVar.add_field(name=f"{ctx.author.name} VS. Veronica",value=f"{ctx.author.name} the human VS. the best Discord bot, according to an objective opinion from: Veronica", inline=False)
                     embedVar.add_field(name=f"Selection of {ctx.author.name} :",value=f"{RPSintTOstr(BUTTONS.value)}", inline=True)
@@ -63,7 +65,7 @@ class RPS(commands.Cog):
                         result=RPSwinner(BUTTONS.p1select,BUTTONS.p2select)
                         #On regénère une nouvelle embed : Le résultat du match
                         embedVar = discord.Embed(color=discord.Color.blue())
-                        embedVar.set_footer(text="Véronica Alpha 1.3")
+                        embedVar.set_footer(text=self.version,icon_url=f"{self.bot.user.avatar}")
                         embedVar.set_author(name=f"{ctx.author} VS. {user}")
                         embedVar.add_field(name=f"Selection of {ctx.author.name} :",value=f"{RPSintTOstr(BUTTONS.p1select)}", inline=True)
                         embedVar.add_field(name=f"Selection of {user} :",value=f"{RPSintTOstr(BUTTONS.p2select)}", inline=True)
@@ -167,60 +169,68 @@ class rpsVersus(discord.ui.View):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 1 #Rock
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.ctx.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !",ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=1 #Rock
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !",ephemeral=True)
+        else:
+            return await interaction.response.defer() #Evite que Discord indique une erreur alors qu'il n'y en a pas
+        
         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             rock_button.style = discord.ButtonStyle.green
             rock_button.disabled=True
-            await interaction.response.edit_message(view=self) #Actualise le bouton
+            await interaction.followup.edit_message(message_id=interaction.message.id,view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
+
     @discord.ui.button(label='Paper 🧻', style=discord.ButtonStyle.grey)
     async def paper(self, interaction: discord.Interaction, paper_button: discord.ui.Button):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 2 #Paper
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !",ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=2 #Paper
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !",ephemeral=True)
+        else:
+            return await interaction.response.defer() #Evite que Discord indique une erreur alors qu'il n'y en a pas
         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             paper_button.style = discord.ButtonStyle.green
             paper_button.disabled=True
-            await interaction.response.edit_message(view=self) #Actualise le bouton
+            await interaction.followup.edit_message(message_id=interaction.message.id,view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
     @discord.ui.button(label='Scissors ✂️', style=discord.ButtonStyle.grey)
     async def scissors(self, interaction: discord.Interaction, scissors_button: discord.ui.Button):
         if interaction.user.id==self.ctx.author.id: #Compare que l'utilisateur qui réagis est bien le même que celui qui a fait la commande d'origine
             if self.p1select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p1select= 3 #Scissors
-                await self.message.send(f"**{self.ctx.author}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.ctx.author}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.ctx.author}** vous avez déjà selectionné une option !",ephemeral=True)
         elif interaction.user.id==self.p2id.id: #Si c'est l'adversaire qui intéragis
             if self.p2select==None: #Si l'utilisateur n'a pas déjà fait une sélection
                 self.p2select=3 #Scissors
-                await self.message.send(f"**{self.p2id}** a fait son choix !")
+                await interaction.response.send_message(content=f"**{self.p2id}** a fait son choix !")
             else:
-                await self.message.send(f"**{self.p2id}** vous avez déjà selectionné une option !")
+                await interaction.response.send_message(content=f"**{self.p2id}** vous avez déjà selectionné une option !",ephemeral=True)
+        else:
+            return await interaction.response.defer() #Evite que Discord indique une erreur alors qu'il n'y en a pas
         #Ne fait rien si aucun des cas est rempli. Cela veut dire que la personne qui a réagis n'a rien à voir avec ce duel
         if None not in [self.p1select,self.p2select]: #Si les 2 utilisateurs ont bien fait leur choix
             scissors_button.style = discord.ButtonStyle.green
             scissors_button.disabled=True
-            await interaction.response.edit_message(view=self) #Actualise le bouton
+            await interaction.followup.edit_message(message_id=interaction.message.id,view=self) #Actualise le bouton
             self.stop() #On arrête l'intéraction
     @discord.ui.button(label='Cancel ❌', style=discord.ButtonStyle.grey)
     async def cancel(self, interaction: discord.Interaction, cancel_button: discord.ui.Button):

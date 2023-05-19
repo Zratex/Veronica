@@ -219,7 +219,7 @@ def getBankStocks()->int:
     cur.execute("SELECT bank_stocks FROM bank")
     result=cur.fetchall()[-1][0]
     return result
-def setBankStocks(amont:int)->int:
+def setBankStocks(amont:int=0)->int:
     """Quantité en plus à ajouter"""
     stock=getBankStocks()+amont
     cur=con.cursor()
@@ -237,6 +237,7 @@ def getJetonCirculation()->int:
     result=cur.fetchall()[-1][0]
     return result
 def getCoursJeton()->int:
+    """Retourne la valeur actuelle d'un Conchiglie"""
     cur=con.cursor()
     cur.execute("SELECT cours_conchiglie FROM bank")
     result=cur.fetchall()[-1][0]
@@ -259,50 +260,72 @@ def getListeEltBank():
     cur.execute("SELECT * FROM bank")
     result=cur.fetchall()
     return result
-def ShowStockGraph():
-    import matplotlib.pyplot as plt
-    x=[] #Absice du temps
-    y=[] #Ordonnée de coquillettes
-    liste=getListeEltBank()
-    for i in range(len(liste)):
-        if not (None in liste[i]):
-            x.append(liste[i][3])
-            y.append(liste[i][0])
-    plt.plot(x,y)
-    plt.xlabel('Temps')
-    plt.ylabel('Coquillettes de la Banque Centrale')
-    plt.title("Stock de coquillettes en fonction du temps")
 
-    # Chemin relatif de la sortie souhaitée
-    output_path = '../economy/MoneyStockGraph.png'
-    # Obtenir le chemin absolu du répertoire courant
-    current_dir = os.path.abspath(os.path.dirname(__file__))
-    # Combiner les chemins pour obtenir le chemin absolu de la sortie souhaitée
-    output_full_path = os.path.join(current_dir, output_path)
-    # Créer le graphique et enregistrer la sortie au chemin absolu
-    plt.savefig(output_full_path)
+# --- Génération des graphiques ---
+def ShowStockGraph():
+    """Génère un graphique affichant l'évolution du stock de coquillettes en banque"""
+    EconomyGraph("ShowStockGraph")
+def ShowJetonStockGraph():
+    """Génère un graphique affichant l'évolution du nombre de jetons en stock"""
+    EconomyGraph("ShowJetonStockGraph")
 def ShowJetonGraph():
+    """Génère un graphique affichant l'évolution de la valeur d'un jeton en stock"""
+    EconomyGraph("ShowJetonGraph")
+
+def EconomyGraph(type:str):
+    """Génère un graphique économique en fonction du type entré"""
+    info=typeGraphe(type=type)
     import matplotlib.pyplot as plt
+    # Créer une nouvelle figure avec des dimensions personnalisées
+    plt.figure(figsize=(10, 6))  # Ajustez les dimensions (width, height) selon vos préférences
     x=[] #Absice du temps
     y=[] #Ordonnée des conchiglie
     liste=getListeEltBank()
     for i in range(len(liste)):
         if not (None in liste[i]):
-            x.append(liste[i][3])
-            y.append(liste[i][2])
+            #On inverse le jour et l'année pour éviter des problèmes :
+            date=liste[i][3]
+            date=date[6:8]+date[2:6]+date[:2]+date[8:]
+            #Formatage sous forme de classe date :
+            x.append(datetime.datetime.strptime(date,'%d-%m-%y %H:%M:%S'))
+            y.append(liste[i][info["value"]])
     plt.plot(x,y)
     plt.xlabel('Temps')
-    plt.ylabel('Valeur du Conchiglie')
-    plt.title("Valeur du Conchiglie en fonction du temps")
+    plt.ylabel(info["YaxisDescription"])
+    plt.title(info["title"])
 
+    # Régler l'affichage de l'ordonnée en utilisant la notation scientifique avec des milliers séparés par des virgules
+    # Généré par ChatGPT par contre
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0), useOffset=False)
+    import matplotlib.ticker as ticker
+    formatter = ticker.StrMethodFormatter('{x:,.0f}')
+    plt.gca().yaxis.set_major_formatter(formatter)
+    # Contrôler l'affichage des valeurs sur l'axe des abscisses
+    plt.gca().xaxis.set_major_locator(plt.MaxNLocator(5)) #On veut qu'il y ait que 5 indicateurs qui soit affichés
+    import matplotlib.dates as mdates
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d-%m-%Y %H:%M:%S'))  # Formatte les dates avec le format spécifié
     # Chemin relatif de la sortie souhaitée
-    output_path = '../economy/graph_jeton.png'
+    output_path = '../economy/'+info["fileoutputname"]
     # Obtenir le chemin absolu du répertoire courant
     current_dir = os.path.abspath(os.path.dirname(__file__))
     # Combiner les chemins pour obtenir le chemin absolu de la sortie souhaitée
     output_full_path = os.path.join(current_dir, output_path)
     # Créer le graphique et enregistrer la sortie au chemin absolu
     plt.savefig(output_full_path)
+    # Effacer la figure actuelle
+    plt.clf()
+    # Fermer la figure
+    plt.close()
+
+def typeGraphe(type):
+    """Définie le type de graph à générer sous forme de dictionnaire"""
+    if type=="ShowJetonGraph":
+        result={"value":2,"YaxisDescription":"Valeur de 1 Conchiglie","title":"Valeur du Conchiglie en fonction du temps","fileoutputname":"graph_jeton.png"}
+    elif type=="ShowJetonStockGraph":
+        result={"value":1,"YaxisDescription":"Nombre de Conchiglie non capitalisé","title":"Stock de conchiglie en fonction du temps","fileoutputname":"graph_jetonstock.png"}
+    elif type=="ShowStockGraph":
+        result={"value":0,"YaxisDescription":"Nombre de coquillettes en banque","title":"Stock de coquillettes dans la banque, en fonction du temps","fileoutputname":"MoneyStockGRaph.png"}
+    return result
 
 # --- Autres fonctions de communication avec la table user ---
 def getUserLootbox(id:int)->int:
@@ -321,40 +344,6 @@ def setUserLootbox(id,amont:int=None,x:int=0)->int:
         cur.execute("UPDATE user SET stock_lootbox = {} WHERE id_discord={}".format(amont+x,id))
         con.commit()
     return getUserLootbox(id)
-"""
-createUser(323147727779397632)
-print(getUserMoney(323147727779397632))
-print(getUserLvl(323147727779397632))
-print(setUserMoney(323147727779397632,1000))
-print(setUserMoney(323147727779397632,None,10))
-print(dailyMoney(323147727779397632))
-print("Xp requis pour lvl up : {}".format(getRequireXPLvl(getUserLvl(323147727779397632)+1)))
-print(getUserXPPourcentage(323147727779397632))
-print(setUserXp(323147727779397632,50))
-print(setUserLvl(323147727779397632,10))
-print(getRequireXPLvl(getUserLvl(323147727779397632)))
-print(setUserXp(323147727779397632,1255))
-print(setUserXp(323147727779397632,None,10))
-print(getSpecXPRole(67))
-
-print(getBankStocks())
-print(setBankStocks(-150))
-print(getJetonCirculation())
-print(getCoursJeton())
-print(UpdateCoursJeton())
-print(getListeEltBank())
-
-from random import randint
-temp=0
-for i in range(10000):
-    #import time
-    #time.sleep(0.5)
-    temp=randint(-10000,10000)
-    while temp==0:
-        temp=randint(-10000,10000)
-    print(setBankStocks(temp))
-print(ShowJetonGraph())
-"""
 
 # --- FONCTIONS A PROPOS DU JEU SMASH ---
 def getCharacterStat(num:int)->tuple:

@@ -21,7 +21,9 @@ class Account(commands.Cog):
             user=ctx.author
         if database.UserExist(identifiant):
             embedVar = discord.Embed(color=discord.Color.blue())
-            embedVar.set_footer(text="Véronica Alpha 1.3")
+            from Version import version
+            botversion=version()
+            embedVar.set_footer(text=botversion,icon_url=f"{self.bot.user.avatar}")
             embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
             embedVar.add_field(name="Id Discord de {}".format(user),value="{}".format(identifiant),inline=False)
             embedVar.add_field(name="Date de création du profile (date américaine)",value="{}".format(database.getCreationDate(identifiant)),inline=False)
