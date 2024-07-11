@@ -24,4 +24,5 @@ A savoir que :
     CREATE DATABASE veronica;
     ```
     - `veronica` sera le nom de la base de données **par défaut** pour ce projet
-- `serverVersion=16` est la **version** de Postgre. Le projet sera sous la version 16 donc ce n'est pas à changer à moins d'un grand changement
+- `serverVersion=15` est la **version** de Postgre. Le projet sera sous la **version 15** car les autres ne sont pas disponibles par défaut sur Debian
+    - Probablement voué à changer dans le futur

@@ -18,9 +18,9 @@ pg_ctl start -D "D:\PostgreSQL\data"
 ```
 > Si cette commande ne fonctionne pas, il faut soit redémarrer le PC, soit démarrer manuellement via Task Manager le service qui s'appelle `postgresql-x64-16.exe` (16 est le numéro de version)
 ## Linux
-Je ne l'ai pas encore essayé, mais selon ChatGPT-3.5 il suffit de simplement aller dans la console de commande et de l'installer :
+Il suffit de simplement aller dans la console de commande et de l'installer :
 ```bash
-$ sudo apt install postgresql postgresql-contrib
+$ sudo apt install postgresql
 ```
 
 Il faudra probablement redémarrer ce service avec un `systemctl`
