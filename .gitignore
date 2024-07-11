@@ -1,0 +1,16 @@
+/token.txt
+
+###> symfony/framework-bundle ###
+/back/veronica-api/.env.local
+/back/veronica-api/.env.local.php
+/back/veronica-api/.env.*.local
+/back/veronica-api/config/secrets/prod/prod.decrypt.private.php
+/back/veronica-api/public/bundles/
+/back/veronica-api/var/
+/back/veronica-api/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/back/veronica-api/.php-cs-fixer.php
+/back/veronica-api/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
