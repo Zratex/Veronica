@@ -15,5 +15,5 @@ Si la commande précédente génère l'erreur `SQLSTATE[42P04]: Duplicate databa
 ## Démarrage
 Le serveur devrait normalement correctement démarrer avec cette commande :
 ```bash
-symfony server:start
+symfony server
 ```
