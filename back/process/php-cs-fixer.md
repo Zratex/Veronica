@@ -2,7 +2,7 @@
 C'est un programme qui permet de vérifier la validiter d'un code, donc ce n'est pas obligatoire à moins que du développement soit réalisé.
 ## Installation
 ```bash
-composer require --dev friendsofphp/php-cs-fixer
+/back/veronica-api/$ composer require --dev friendsofphp/php-cs-fixer
 ```
 L'IDE peut être modifié afin d'utiliser CS-Fixer.
 ## Scripts Composer

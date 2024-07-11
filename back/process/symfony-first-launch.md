@@ -3,7 +3,7 @@ Une fois que PostgreSQL a été correctement configuré avec le `.env.local`, on
 
 Avant cela, cette commande est à executer dans le dépôt :
 ```bash
-composer require doctrine/orm doctrine/doctrine-bundle doctrine/doctrine-migrations-bundle
+/back/veronica-api/$ composer require doctrine/orm doctrine/doctrine-bundle doctrine/doctrine-migrations-bundle
 ```
 ## Configuration du driver
 Toute action avec la BD ne fonctionnera pas si le driver n'a pas été correctement configuré. Pour cela, il faut trouver le fichier `php.ini` dans l'installation de **PHP**.
@@ -15,5 +15,5 @@ Si la commande précédente génère l'erreur `SQLSTATE[42P04]: Duplicate databa
 ## Démarrage
 Le serveur devrait normalement correctement démarrer avec cette commande :
 ```bash
-symfony server
+/back/veronica-api/$ symfony server
 ```

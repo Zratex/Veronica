@@ -3,7 +3,7 @@ Il faut tout d'abord que Postgre soit [installé](/back/process/postgre-install.
 ## Console de commande
 Pour accéder à la console postgre, il faut entrer la commande :
 ```bash
-psql -U postgres
+$ psql -U postgres
 ```
 Le mot de passe de l'utilisateur `postgre` sera demandé, défini lors de l'étape [repo-init.md](/back//process/repo-init.md)
 ## Symfony

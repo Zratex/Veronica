@@ -10,7 +10,7 @@ Contrairement à l'`Alpha 1.2` qui était sous `Discord.py 1.0`, l'`Alpha 1.3` e
 ### - [Current] Alpha 1.4
 Réagencement des dossiers pour que ce soit plus lisibles sur Github, mais surtout début de l'implémentation d'un back-end en API platform.
 #### Patchnote
-Un suivi de patchnote est présent dans le dossier patchnotes pour plus d'informations sur chaques mises à jours intermédiaires ou mineures.
+Un suivi de patchnote est présent dans le dossier `/patchnotes/` pour plus d'informations sur chaques mises à jours intermédiaires ou mineures.
 
 ## Documentation (probablement out-dated)
 Documentation du bot : https://docs.google.com/document/d/1K2y5F9WJhgLeOG6MUtEtADuyp7ijQucl5CjRj1WxIQk/edit?usp=sharing
