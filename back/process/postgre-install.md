@@ -1,10 +1,12 @@
 # Installation de PostgreSQL
-Après l'[initialisation du dépôt](/process/repo-init.md), une base de données est requise. Pour ce projet PostgreSQL a été choisi pour m'entrainer à son installation et sa prise en main, mais surtout pour des raisons de performances car Véronica risque de faire beaucoup de requêtes en parallèle.
+Après l'[initialisation du dépôt](/back/process/repo-init.md), une base de données est requise. Pour ce projet PostgreSQL a été choisi pour m'entrainer à son installation et sa prise en main, mais surtout pour des raisons de performances car Véronica risque de faire beaucoup de requêtes en parallèle.
 ## Windows
 Après avoir téléchargé l'installateur sur le site officiel. Une fois l'installation lancé, le chemin d'accès de l'installation sera demandé.
 
 Pendant l'installation, un mot de passe sera demandé pour le superadmin. Puis, un port sera à définir.
-> Le port par défaut est **5432**
+> **Caractères spéciaux à éviter** dans le mot de passe. Sinon cela risque de causer des problèmes dans l'URL de connexion à Postgre depuis Symfony
+
+Le port par défaut est **5432**
 
 La langue `French - France` a été choisie.
 ### Lancement sur Windows
@@ -23,4 +25,4 @@ $ sudo apt install postgresql postgresql-contrib
 
 Il faudra probablement redémarrer ce service avec un `systemctl`
 # Accéder à Postgre
-Maintenant que Postgre est installé, pour vérifier qu'il est correctement installé, il faut s'y [connecter](/process/postgre-connexion.md)
+Maintenant que Postgre est installé, pour vérifier qu'il est correctement installé, il faut s'y [connecter](/back/process/postgre-connexion.md)
