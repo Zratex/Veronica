@@ -1,16 +1,14 @@
 # Véronica
-Ce dépôt Github sera le code public de Véronica, que je mettrais de temps en temps à jour pour les curieux d'entre vous qui seraient intéressés par le développement du Bot. Il utilise `discord.py 2.0` pour fonctionner
-## Mises à jour :
+Ce dépôt Github sera le code public de Véronica, que je mettrais de temps en temps à jour pour les curieux d'entre vous qui seraient intéressés par le développement du Bot. Il utilise `discord.py 2.0` pour fonctionner, avec comme back-end `API-Platform` (Symfony) et `PostgreSQL` en base de données.
+## Mises à jour majeures :
 ### - Alpha 1.2
 L'Alpha 1.2 du bot était sous `Discord.py 1.0`.
 
 Tout les fichiers de cette version sont localisés dans le dossier du même nom que la mise à jour, car celle ci n'est plus à jour.
-### - [Current] Alpha 1.3
-Le bot est toujours en Alpha. Nouvelle versoin du bot : **Alpha 1.3**
-
-Cette version n'est pas entièrement terminée pour le moment. Contrairement à l'`Alpha 1.2` qui était sous `Discord.py 1.0`, l'`Alpha 1.3` est sous `Discord.py 2.0`, ce qu'il fait qu'il y a l'intégration des commandes `/`, des boutons et autre.
-Par contre je fais pas le fou, je ne vais quand même pas mettre le token du Bot ici.
-
+### - Alpha 1.3
+Contrairement à l'`Alpha 1.2` qui était sous `Discord.py 1.0`, l'`Alpha 1.3` est sous `Discord.py 2.0`, ce qu'il fait qu'il y a l'intégration des commandes `/`, des boutons et autre.
+### - [Current] Alpha 1.4
+Réagencement des dossiers pour que ce soit plus lisibles sur Github, mais surtout début de l'implémentation d'un back-end en API platform.
 #### Patchnote
 Un suivi de patchnote est présent dans le dossier patchnotes pour plus d'informations sur chaques mises à jours intermédiaires ou mineures.
 
