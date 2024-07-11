@@ -5,9 +5,9 @@ Pour accéder à la console postgre, il faut entrer la commande :
 ```bash
 $ psql -U postgres
 ```
-Le mot de passe de l'utilisateur `postgre` sera demandé, défini lors de l'étape [repo-init.md](/back//process/repo-init.md)
-## Symfony
-En premier lieu, il faut créer le fichier `.env.local` qui est une copie de `.env` dans la racine de l'API, càd dans le dossier `veronica-api/`.
+Le mot de passe de l'utilisateur `postgre` sera demandé, défini lors de l'étape [repo-init.md](/back/process/repo-init.md)
+## .env.local
+En premier lieu, il faut créer le fichier `.env.local` qui est une copie de `.env` dans la racine de l'API, càd dans le dossier `/back/veronica-api/`.
 
 Ensuite, il faut remplacer le contenu du `DATABASE_URL` :
 ```

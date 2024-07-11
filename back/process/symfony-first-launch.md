@@ -1,7 +1,7 @@
 # Symfony first launch
-Une fois que PostgreSQL a été correctement configuré avec le `.env.local`, on peut désormais travailler avec Symfony.
+Une fois que PostgreSQL a été correctement configuré avec le [.env.local](/back/process/postgre-connexion.md), on peut désormais travailler avec Symfony.
 
-Avant cela, cette commande est à executer dans le dépôt :
+Avant cela, si doctrine/orm etc ne sont pas installés, cette commande est à executer dans le dépôt :
 ```bash
 /back/veronica-api/$ composer require doctrine/orm doctrine/doctrine-bundle doctrine/doctrine-migrations-bundle
 ```

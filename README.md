@@ -1,5 +1,19 @@
 # Véronica
 Ce dépôt Github sera le code public de Véronica, que je mettrais de temps en temps à jour pour les curieux d'entre vous qui seraient intéressés par le développement du Bot. Il utilise `discord.py 2.0` pour fonctionner, avec comme back-end `API-Platform` (Symfony) et `PostgreSQL` en base de données.
+## Installation
+Ce projet nécessite sur le poste en question, l'installation de :
+- `discord.py 2.0`
+    - Si pas déjà fait, installer `Python`
+- [PostgreSQL](/back/process/postgre-install.md)
+- `Symfony`
+    - Si pas déjà fait, installer `PHP`
+    - Si pas déjà fait, installer `Composer`
+- Executer cette commande après l'installation de `Symfony` :
+```bash
+/back/veronica-api/$ composer install
+```
+- Créer le fichier [.env.local](/back/process/postgre-connexion.md#envlocal)
+- Migrer la structure de la base de données : [migration](/back/process/migration.md#application-dune-migration)
 ## Mises à jour majeures :
 ### - Alpha 1.2
 L'Alpha 1.2 du bot était sous `Discord.py 1.0`.
