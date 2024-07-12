@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApilogsRepository::class)]
 #[ApiResource]
-class Apilogs
+class Apilog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -17,7 +17,7 @@ class Apilogs
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $apilogs_id = null;
+    private ?int $apilog_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $origin = null;
@@ -36,14 +36,14 @@ class Apilogs
         return $this->id;
     }
 
-    public function getApilogsId(): ?int
+    public function getApilogId(): ?int
     {
-        return $this->apilogs_id;
+        return $this->apilog_id;
     }
 
-    public function setApilogsId(int $apilogs_id): static
+    public function setApilogsId(int $apilog_id): static
     {
-        $this->apilogs_id = $apilogs_id;
+        $this->apilog_id = $apilog_id;
 
         return $this;
     }

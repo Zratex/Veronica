@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Apilogs;
+use App\Entity\Apilog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Apilogs>
+ * @extends ServiceEntityRepository<Apilog>
  */
 class ApilogsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Apilogs::class);
+        parent::__construct($registry, Apilog::class);
     }
 
     //    /**
-    //     * @return Apilogs[] Returns an array of Apilogs objects
+    //     * @return Apilog[] Returns an array of Apilog objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ApilogsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Apilogs
+    //    public function findOneBySomeField($value): ?Apilog
     //    {
     //        return $this->createQueryBuilder('a')
     //            ->andWhere('a.exampleField = :val')
