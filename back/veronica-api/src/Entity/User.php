@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     #[ORM\Id]
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $id_discord = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $id_discord = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $username = null;
@@ -42,14 +42,20 @@ class User
     #[ORM\Column]
     private ?int $level = null;
 
+    public function getIdDiscord(): ?int
+    {
+        return $this->id_discord;
+    }
+
+    public function setIdDiscord(int $id): static
+    {
+        $this->id_discord = $id;
+
+        return $this;
+    }
     public function getUsername(): ?string
     {
         return $this->username;
-    }
-
-    public function getIdDiscord(): ?string
-    {
-        return $this->id_discord;
     }
 
     public function setUsername(string $username): static
