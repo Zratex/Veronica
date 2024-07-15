@@ -17,6 +17,9 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $username = null;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $id_discord = null;
 
@@ -46,9 +49,20 @@ class User
         return $this->id;
     }
 
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
     public function getIdDiscord(): ?string
     {
         return $this->id_discord;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+        return $this;
     }
 
     public function setIdDiscord(string $id_discord): static

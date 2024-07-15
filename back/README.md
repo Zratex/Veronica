@@ -22,6 +22,7 @@ title : Structuration de la BD
 classDiagram
     class user {
         -int id_discord PK
+        -string username
         -int money
         -date creation_date
         -date daily_cooldown
@@ -55,7 +56,10 @@ classDiagram
 ### Description des tables
 Voici la description et les détails de chacunes des tables
 #### user
-Représente un utilisateur, identifié par son identifiant Discord.
+Représente un utilisateur, identifié par son identifiant Discord (`id_discord`).
+- `name` : pseudo de l'utilisateur sur le serveur BDN
+    - A chaque appel de l'API concernant un utilisateur, une fonction se déclenchera pour vérifier si l'utilisateur n'a pas changé de pseudo
+    - Une liste d'utilisateurs sera trié par ordre alphabétique du pseudo
 - `money` : Quantité d'argent qu'à en stock un utilisateur
 - `creation_date` : Date de création du compte de l'utilisateur dans la base de données de Véronica
 - `daily_cooldown` : Date du dernier `/daily` qu'a réalisé l'utilisateur. Permet de calculer depuis combien de temps il n'a pas fait de commande `/daily`
