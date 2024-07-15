@@ -6,6 +6,12 @@ Pour accéder à la console postgre, il faut entrer la commande :
 $ psql -U postgres
 ```
 Le mot de passe de l'utilisateur `postgre` sera demandé, défini lors de l'étape [repo-init.md](/back/process/repo-init.md)
+
+> Pour directement accéder à la base de données de Véronica : `psql -U postgres -d veronica`
+
+Commandes de base de Postgre :
+- `\l` liste les bases de données
+- `\dt` liste les tables (dit "schéma" de ce que j'ai compris) une fois dans une base de données
 ## .env.local
 En premier lieu, il faut créer le fichier `.env.local` qui est une copie de `.env` dans la racine de l'API, càd dans le dossier `/back/veronica-api/`.
 
