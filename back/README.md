@@ -1,5 +1,7 @@
 # Veronica API
 API dédié pour les actions qui seront executées sur le système de Véronica. L'idée est que le système permettant de connecter le site web ainsi que Véronica soient les mêmes.
+- [Structure de la base de données](#struture-de-la-bd)
+- [Structuration du serveur](#structure-réseau-du-serveur)
 
 ## Description des dossiers
 > `/veronica-api`
@@ -78,3 +80,39 @@ Journeaux des requêtes qui ont été faites à l'API.
 - `method` : Méthode HTTP utilisée pour l'action
 - `route` : Ressource demandée par la requête
 - `time` : Quand est ce que cette requête a été faite
+> La génération d'une ligne de cette table doit seulement se faire par le proxy. Si ce n'est pas possible d'intercepter les requêtes du bot, il faudrait que dès que le bot fasse une requête une ligne soit aussi générée
+## Structure réseau du serveur
+L'idée est qu'un serveur sera déployé pour à la fois host le bot, mais aussi l'API. Un début d'implémentation a été envisagé, mais au final on va probablement opter pour quelque chose du style :
+```mermaid
+flowchart TB
+    subgraph serv [Serveur Linux Debian]
+        subgraph cont1 [Container PHP]
+            API(API)
+        end
+        subgraph cont2 [Container Python]
+            bot[Véronica]
+        end
+        subgraph cont3 [Container PostgreSQL]
+            BD[(Base de Données)]
+        end
+        bot-.->API
+        API-.->BD
+        BD-->API
+        API-->bot
+    end
+    net((internet))
+    discord{Discord API}
+    proxy{{proxy}}
+    net-.->proxy
+
+    proxy-.->|log|API
+    proxy-.->API
+    API-->proxy-->net
+
+    net-.->discord
+    discord-.->bot
+    bot--->discord
+```
+A noter que :
+- Les containers seront des containers Docker
+- Quand une requête est effectuée au proxy, le proxy demande à l'API la création d'un log dans la base de données
