@@ -14,9 +14,6 @@ class Levels
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
     private ?int $level = null;
 
     #[ORM\Column]
@@ -25,21 +22,9 @@ class Levels
     #[ORM\Column(type: Types::TEXT)]
     private ?string $role_name = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getLevel(): ?int
     {
         return $this->level;
-    }
-
-    public function setLevel(int $level): static
-    {
-        $this->level = $level;
-
-        return $this;
     }
 
     public function getXpRequired(): ?int

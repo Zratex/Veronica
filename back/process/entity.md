@@ -19,3 +19,21 @@ Quelques directives pour les champs :
 - Toutes les dates seront de types `datetime`
 
 Une fois l'entitée de créer, il faut l'implémenter dans la base de données en faisant une [migration](/back/process/migration.md)
+## Clés
+### Clé primaire
+Il faut ajouter ces lignes à l'attribut de l'entité qui sera la clé primaire :
+```php
+#[ORM\Id]
+// Si il y a besoin que la clé soit généré automatiquement lors de la création d'une entrée :
+// #[ORM\GeneratedValue]
+#[ORM\Column]
+```
+### Clé seconaire
+En admettons que `NomDeLaClasse` est l'entité cible et que son id est `id` :
+```php
+#[ORM\ManyToOne(targetEntity: NomDeLaClasse::class)]
+// Si relation manytomany recherchée :
+// #[ORM\ManyToMany(targetEntity: NomDeLaClasse::class)]
+#[ORM\JoinColumn(name: 'id_NomDeLaClasse', referencedColumnName: 'id', nullable: false)]
+// Y ajouter "columnDefinition: 'INT DEFAULT 0'" dans ce JoinColumn permet de définir une valeur par défaut
+```

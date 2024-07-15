@@ -13,15 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $id_discord = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $username = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $id_discord = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $money = null;
@@ -41,13 +37,10 @@ class User
     #[ORM\Column]
     private ?int $stock_lootbox = null;
 
+    #[ORM\ManyToOne(targetEntity: Levels::class)]
+    #[ORM\JoinColumn(name: 'id_levels', referencedColumnName: 'level', nullable: false, columnDefinition: 'INT DEFAULT 0')]
     #[ORM\Column]
     private ?int $level = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getUsername(): ?string
     {
@@ -62,12 +55,6 @@ class User
     public function setUsername(string $username): static
     {
         $this->username = $username;
-        return $this;
-    }
-
-    public function setIdDiscord(string $id_discord): static
-    {
-        $this->id_discord = $id_discord;
 
         return $this;
     }
