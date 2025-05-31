@@ -1,5 +1,5 @@
 /token.txt
-
+/back/veronica-api/.idea/
 ###> symfony/framework-bundle ###
 /back/veronica-api/.env.local
 /back/veronica-api/.env.local.php

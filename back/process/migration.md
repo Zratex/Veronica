@@ -1,5 +1,9 @@
+> pom radinerie — Today at 4:56 PM
+> Les migrations c’est vrm de la merde
 # Migrations
-C'est pour migrer des données en gros. A noter qu'il faut nécéssairement que le module des entity soit installé, si ce n'est pas déjà fait, il faut l'installer comme décrit dans [entity](/back/process/entity.md)
+C'est pour migrer des données en gros. A noter qu'il faut nécéssairement que le module des entity soit installé, si ce n'est pas déjà fait, il faut l'installer comme décrit dans [entity](/back/process/entity.md).
+
+Pour mettre à jour correctement la BD Postgre, il faut voir les [schema](/back/process/schema.md)
 ## Création de migrations
 Une migration est une requête SQL. Pour vérifier sa validité, il faut executer cette commande :
 ```bash
