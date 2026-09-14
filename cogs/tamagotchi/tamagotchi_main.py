@@ -1,6 +1,6 @@
 from discord.ext import commands
 #Importation des fonctions nécessaires au bout fonctionnement du Tamagotchi.
-from .db_tamagochi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
+from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
