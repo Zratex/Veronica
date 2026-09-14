@@ -13,7 +13,8 @@ class profile(commands.Cog):
             userid=user.id 
         else:
             userid = ctx.author.id
-        await ctx.send(f"Retour DB : {db_tamagochi.get_or_create_user(self.bot.pool,userid)}")
+        result = await db_tamagochi.get_or_create_user(self.bot.pool,userid)
+        await ctx.send(f"Retour DB : {result}")
 
 async def setup(bot):
     await bot.add_cog(profile(bot))
