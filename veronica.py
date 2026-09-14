@@ -78,7 +78,7 @@ async def on_command_error(ctx,error):
     elif isinstance(erreur,commands.MissingRequiredArgument):
         await ctx.send("Il manque un argument à la commande, essayez de nouveau peut être ?")
     else:
-        await print("Erreur dans le channel {} par {} :\n{}".format(ctx.channel,ctx.author,erreur))
+        print("Erreur dans le channel {} par {} :\n{}".format(ctx.channel,ctx.author,erreur))
         await ctx.send("Une erreur est survenue lors de votre tentative d'execution de la commande. Veuillez faire un report de bug dans le salon <#836700382138859540>\n__Voici l'erreur en question :__\n```{}```".format(erreur))
         traceback.print_exception(type(erreur), erreur, erreur.__traceback__, file=sys.stderr)
 
