@@ -5,7 +5,7 @@ services:
     build: .
     restart: unless-stopped
     environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN} # Rempli via un fichier .env externe
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
       - POSTGRES_USER=veronica
       - POSTGRES_PASSWORD=${POSTGRE_PASSWORD}
       - POSTGRES_DB=veronicadb
