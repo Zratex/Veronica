@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+import database_init
 
 zratey_id=323147727779397632
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=zratey_id) # Zratey#0860 :D
@@ -9,6 +10,8 @@ listOfCogs={"cogs.tamagochi.tamagochi_main": ["tamagochi"]}
 
 @bot.event
 async def on_ready():
+    bot.pool = await database_init.create_db_pool() #Connexion à la BD
+    await database_init.init_db(bot.pool) #Initialise la BD si elle est vide
     print("Connectée !")
     try:
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="moi ! Je ne fais office que de présence 😎"))
@@ -87,8 +90,17 @@ async def sync(ctx) -> None:
     await ctx.send("Commandes resynchronisées")
     print("Commandes resynchronisées")
 
+""" === Méthode connexion bot avec fichier
 filetoken = open(f"token.txt", "r")
 for x in filetoken:
     token=x
 filetoken.close()
+bot.run(token)
+"""
+
+""" === Méthode connexion bot avec dockerfile (à tester) ==="""
+import os
+token = os.environ.get("DISCORD_TOKEN")
+if not token:
+    raise ValueError("Le token Discord n'est pas défini dans les variables d'environnement (DISCORD_TOKEN).")
 bot.run(token)
