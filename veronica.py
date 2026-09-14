@@ -6,8 +6,8 @@ import database_init
 zratey_id=323147727779397632
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=zratey_id) # Zratey#0860 :D
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
-listOfCogs={"cogs.tamagotchi.tamagotchi_main": ["tamagochi, tamagotchi, tamagoshi"],
-            "cogs.user.profile": ["profile"]}
+listOfCogs={"cogs.tamagotchi.tamagotchi_main": ["tamagochi", "tamagotchi", "tamagoshi"],
+            "cogs.user.profile": ["profile", "profil"]}
 
 @bot.event
 async def on_ready():
@@ -31,7 +31,7 @@ async def load(interaction: discord.Interaction, module: str):
             if type(a) == IndexError:
                 await interaction.response.send_message(f"Le module **{module}** n'existe pas, ou n'a pas été trouvé")
             else:
-                await print(a) 
+                print(a) 
                 await interaction.response.send_message(f"Une erreur est survenue en essayant de charger le module **{module}** : `{a}`",ephemeral=False)
     else:
         await interaction.response.send_message("Vous n'avez pas la permission d'utiliser cette commande",ephemeral=False)
