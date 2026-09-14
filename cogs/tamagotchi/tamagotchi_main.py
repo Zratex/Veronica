@@ -9,7 +9,7 @@ class tamagotchi_main(commands.Cog):
     @commands.hybrid_command(name="tamagotchis",description="Liste des tamagotchis")
     async def tamagotchis(self,ctx: commands.Context):
         nbTamas = await count_user_tamagotchis(self.bot.pool,ctx.author.id)
-        if nbTamas > 0:
+        if nbTamas == 0:
             await ctx.send("Tamagotchi à créer")
         else:
             await ctx.send("(à développer)")
