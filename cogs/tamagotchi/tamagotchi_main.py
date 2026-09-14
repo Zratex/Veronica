@@ -8,7 +8,7 @@ class tamagotchi_main(commands.Cog):
     
     @commands.hybrid_command(name="tamagotchi",description="Gérez votre tamagotchi")
     async def tamagotchi(self,ctx: commands.Context):
-        if get_amount_alived_tamagotchis_by_owner(self.bot.pool,ctx.author.id) > 0:
+        if count_user_tamagotchis(self.bot.pool,ctx.author.id) > 0:
             await ctx.send("Tamagotchi à créer")
         else:
             await ctx.send("(à développer)")

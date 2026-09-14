@@ -28,10 +28,6 @@ async def get_user_tamagotchis(pool, user_id: int):
         records = await conn.fetch('SELECT * FROM tamagotchis WHERE user_id = $1', user_id)
         return [dict(record) for record in records]
 
-async def get_amount_alived_tamagotchis_by_owner(pool, user_id: int):
-    """Retourne la liste des tamagotchis d'un utilisateur"""
-    async with pool.acquire() as conn:
-        n = await conn.fetrow('COUNT ')
 async def count_user_tamagotchis(pool, user_id: int) -> int:
     """Compte le nombre de tamagotchis possédés par un utilisateur."""
     async with pool.acquire() as conn:
