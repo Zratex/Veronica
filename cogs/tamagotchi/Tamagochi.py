@@ -1,6 +1,6 @@
 from random import randint
 
-class Tamagoshi:
+class Tamagotchi:
     lifeTime=10
     def __init__(self,name : str):
         self.age=0
@@ -10,7 +10,7 @@ class Tamagoshi:
         self.fun=randint(3,7) #stat bonheur
         self.name=name
     def parle(self):
-        """Indique comment va le Tamagoshi"""
+        """Indique comment va le Tamagotchi"""
         if self.energy > 4 and self.fun > 4:
             print(f"{self.name} : I'm bing chilling")
         else:
@@ -47,7 +47,7 @@ class Tamagoshi:
             return True
     def estMortVieillesse(self) -> bool:
         """Retourne vrai si mort de vieillesse"""
-        return self.age >= Tamagoshi.lifeTime
+        return self.age >= Tamagotchi.lifeTime
     def __str__(self):
-        """Retourne les informations du Tamagoshi courant"""
+        """Retourne les informations du Tamagotchi courant"""
         return "Name : "+self.name+";Age : "+str(self.age)+"; maxEnergy : "+str(self.maxEnergy)+"; Energy : "+str(self.energy)+"; maxiFun : "+str(self.maxiFun)+"; Fun : "+str(self.fun)

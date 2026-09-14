@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord import Member
-from ..tamagochi import db_tamagochi
+from ..tamagotchi import db_tamagotchi
 
 class profile(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +13,7 @@ class profile(commands.Cog):
             userid=user.id 
         else:
             userid = ctx.author.id
-        result = await db_tamagochi.get_or_create_user(self.bot.pool,userid)
+        result = await db_tamagotchi.get_or_create_user(self.bot.pool,userid)
         await ctx.send(f"Retour DB : {result}")
 
 async def setup(bot):
