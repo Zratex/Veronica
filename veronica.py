@@ -6,7 +6,8 @@ import database_init
 zratey_id=323147727779397632
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=zratey_id) # Zratey#0860 :D
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
-listOfCogs={"cogs.tamagochi.tamagochi_main": ["tamagochi"]}
+listOfCogs={"cogs.tamagochi.tamagochi_main": ["tamagochi"],
+            "cogs.profile.profile": ["profile"]}
 
 @bot.event
 async def on_ready():
