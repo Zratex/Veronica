@@ -13,4 +13,4 @@ RUN pip install asyncpg
 COPY . .
 
 # Remplacez par le nom de votre fichier principal si nécessaire
-CMD ["python", "main.py"]
+CMD ["python", "veronica.py"]
