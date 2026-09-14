@@ -28,6 +28,22 @@ async def get_user_tamagotchis(pool, user_id: int):
         records = await conn.fetch('SELECT * FROM tamagotchis WHERE user_id = $1', user_id)
         return [dict(record) for record in records]
 
+async def get_amount_alived_tamagotchis_by_owner(pool, user_id: int):
+    """Retourne la liste des tamagotchis d'un utilisateur"""
+    async with pool.acquire() as conn:
+        n = await conn.fetrow('COUNT ')
+async def count_user_tamagotchis(pool, user_id: int) -> int:
+    """Compte le nombre de tamagotchis possédés par un utilisateur."""
+    async with pool.acquire() as conn:
+        # fetchval est utilisé au lieu de fetchrow car on attend une seule valeur (le compteur)
+        count = await conn.fetchval(
+            'SELECT COUNT(*) FROM tamagotchis WHERE user_id = $1', 
+            user_id
+        )
+        # On retourne le compte, ou 0 si la requête ne renvoie rien
+        return count or 0
+
+
 async def update_tamagotchi_stats(pool, tamagotchi_id: int, energy_change: int, fun_change: int):
     """Met à jour l'énergie et le fun d'un tamagotchi spécifique, en respectant les limites (0-max)."""
     async with pool.acquire() as conn:
