@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discord import Member
 from ..tamagotchi import db_tamagotchi
+from ...getVersion import get_version
 
 class profile(commands.Cog):
     def __init__(self, bot):
@@ -15,6 +16,7 @@ class profile(commands.Cog):
             userid = ctx.author.id
         result = await db_tamagotchi.get_or_create_user(self.bot.pool,userid)
         await ctx.send(f"Retour DB : {result}")
+        await ctx.send(f"`Véronica {get_version()}`")
 
 async def setup(bot):
     await bot.add_cog(profile(bot))

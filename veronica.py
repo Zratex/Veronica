@@ -91,15 +91,7 @@ async def sync(ctx) -> None:
     await ctx.send("Commandes resynchronisées")
     print("Commandes resynchronisées")
 
-""" === Méthode connexion bot avec fichier
-filetoken = open(f"token.txt", "r")
-for x in filetoken:
-    token=x
-filetoken.close()
-bot.run(token)
-"""
-
-""" === Méthode connexion bot avec dockerfile (à tester) ==="""
+""" === Méthode connexion bot avec dockerfile ==="""
 import os
 token = os.environ.get("DISCORD_TOKEN")
 if not token:
