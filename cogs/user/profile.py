@@ -22,11 +22,12 @@ class profile(commands.Cog):
         # Affichage du profile de l'utilisateur
         for key, value in result.items():
             if key == "id":
+                embedVar.set_thumbnail(url="{}".format(user.avatar.url))
                 embedVar.add_field(name="Id Discord :",value="`{}`".format(value), inline=True)
-                embedVar.add_field(name="Pseudo du serveur :",value="{}".format(user.name), inline=True)
-                embedVar.add_field(name="Pseudo global :",value="{}".format(user.global_name), inline=True)
+                embedVar.add_field(name="Pseudo du serveur :",value="{}".format(user.global_name), inline=True)
+                embedVar.add_field(name="Pseudo global :",value="{}".format(user.name), inline=True)
             elif key == "A EDITER":
-                embedVar.add_field(name="Coquillettes :",value="{} <:coquillette:802972160364249119>".format(value), inline=False)
+                embedVar.add_field(name="<:coquillette:802972160364249119>en solde :",value="{}".format(value), inline=False)
             else:
                 embedVar.add_field(name="{}".format(key),value="{}".format(value), inline=False)
         await ctx.send(embed=embedVar)
