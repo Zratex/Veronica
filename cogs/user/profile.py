@@ -23,8 +23,7 @@ class profile(commands.Cog):
         for key, value in result.items():
             if key == "id":
                 embedVar.set_thumbnail(url="{}".format(user.avatar.url))
-                embedVar.add_field(name="Profile de {}".format(user.global_name),value="id : `{}`".format(value), inline=True)
-                embedVar.add_field(name="Pseudo Discord global :",value="{}".format(user.name), inline=True)
+                embedVar.add_field(name="Profile de {} (`{}`)".format(user.global_name, user.name),value="id : `{}`".format(value), inline=True)
             elif key == "money":
                 embedVar.add_field(name="<:coquillette:802972160364249119>en solde :",value="{}".format(value), inline=False)
             else:
