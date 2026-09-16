@@ -14,5 +14,9 @@ def get_version() -> str:
 
         return result.stdout.strip()
 
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except subprocess.CalledProcessError as e:
+        print("Erreur Git :", e.stderr)
+        return "unknown"
+    except FileNotFoundError:
+        print("Git n'est pas installé ou n'est pas accessible.")
         return "unknown"
