@@ -16,5 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install asyncpg
 
 COPY . .
+RUN chmod +x start.sh
 
 CMD ["./start.sh"]
