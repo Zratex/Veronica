@@ -18,7 +18,7 @@ class tamagotchi_main(commands.Cog):
             await ctx.send("(à développer)")
 
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")
-    async def buyTamagotchi(self,ctx: commands.Context, name: int):
+    async def buyTamagotchi(self,ctx: commands.Context, name: str):
         # Vérification que l'utilisateur a assez d'argent
         usermoney = await get_user_money()
         tamaPrice = await get_base_price_to_buy_tamagotchi()
