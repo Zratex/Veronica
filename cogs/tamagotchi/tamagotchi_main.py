@@ -17,7 +17,7 @@ class tamagotchi_main(commands.Cog):
         else:
             await ctx.send("(à développer)")
 
-    @commands.hybrid_command(name="buyTamagotchi",description="Achat d'un nouveau tamagotchi")
+    @commands.hybrid_command(name="buy tamagotchi",description="Achat d'un nouveau tamagotchi")
     async def buyTamagotchi(self,ctx: commands.Context):
         CONFIRMATION=confirmationView()
         await ctx.send("Souhaitez vous acheter un tamagotchi ?",view=CONFIRMATION)
