@@ -20,8 +20,8 @@ class tamagotchi_main(commands.Cog):
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")
     async def buyTamagotchi(self,ctx: commands.Context, name: str):
         # Vérification que l'utilisateur a assez d'argent
-        usermoney = await get_user_money()
-        tamaPrice = await get_base_price_to_buy_tamagotchi()
+        usermoney = await get_user_money(self.bot.pool,ctx.author.id)
+        tamaPrice = await get_base_price_to_buy_tamagotchi(self.bot.pool)
         if usermoney < tamaPrice:
             await ctx.send("Vous n'avez pas assez pour acheter un tamagotchi. Votre solde : {}<:coquillette:802972160364249119> ; Prix d'un tamagotchi : {}<:coquillette:802972160364249119>".format(usermoney,tamaPrice),
                            ephemeral=True)
