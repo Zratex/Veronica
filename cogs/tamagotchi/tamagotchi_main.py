@@ -1,6 +1,7 @@
 from discord.ext import commands
 #Importation des fonctions nécessaires au bout fonctionnement du Tamagotchi.
 from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
+from ..confirmationView import confirmationView
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -15,6 +16,16 @@ class tamagotchi_main(commands.Cog):
             await ctx.send("Tamagotchi à créer")
         else:
             await ctx.send("(à développer)")
+
+    @commands.hybrid_command(name="buyTamagotchi",description="Achat d'un nouveau tamagotchi")
+    async def buyTamagotchi(self,ctx: commands.Context):
+        CONFIRMATION=confirmationView()
+        await ctx.send("Souhaitez vous acheter un tamagotchi ?",view=CONFIRMATION)
+        await CONFIRMATION.wait()
+        if not CONFIRMATION.value:
+            ctx.send("Votre achat a été annulé",ephemeral=True)
+        else:
+            ctx.send("(achat du tamagotchi à développer)")
 
 async def setup(bot):
     await bot.add_cog(tamagotchi_main(bot))
