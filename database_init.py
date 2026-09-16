@@ -1,6 +1,8 @@
 import asyncpg
 import os
 
+from cogs.tamagotchi.db_tamagotchi import create_admin_shop
+
 async def create_db_pool():
     """Crée le pool de connexion à la base de données PostgreSQL."""
     return await asyncpg.create_pool(
@@ -28,4 +30,12 @@ async def init_db(pool):
                 max_fun INT DEFAULT 100,
                 current_fun INT DEFAULT 100
             );
+
+            CREATE TABLIE IF NOT EXISTS admin_shop_pricings (
+                id SERIAL PRIMARY KEY,
+                tamagotchi_base_price DOUBLE PRECISION DEFAULT 500.0,
+                tamagotchi_skin_base_price DOUBLE PRECISION DEFAULT 100.0
+            );
         ''')
+
+        await create_admin_shop(pool=pool)

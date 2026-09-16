@@ -18,14 +18,26 @@ class tamagotchi_main(commands.Cog):
             await ctx.send("(à développer)")
 
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")
-    async def buyTamagotchi(self,ctx: commands.Context):
-        CONFIRMATION=confirmationView()
-        await ctx.send("Souhaitez vous acheter un tamagotchi ?",view=CONFIRMATION)
-        await CONFIRMATION.wait()
-        if not CONFIRMATION.value:
-            await ctx.send("Votre achat a été annulé")
+    async def buyTamagotchi(self,ctx: commands.Context, name: int):
+        # Vérification que l'utilisateur a assez d'argent
+        usermoney = await get_user_money()
+        tamaPrice = await get_base_price_to_buy_tamagotchi()
+        if usermoney < tamaPrice:
+            await ctx.send("Vous n'avez pas assez pour acheter un tamagotchi. Votre solde : {}<:coquillette:802972160364249119> ; Prix d'un tamagotchi : {}<:coquillette:802972160364249119>".format(usermoney,tamaPrice),
+                           ephemeral=True)
         else:
-            await ctx.send("(achat du tamagotchi à développer)")
+            # Module demande achat
+            CONFIRMATION=confirmationView()
+            await ctx.send("Souhaitez vous acheter un tamagotchi ? Votre solde : {}<:coquillette:802972160364249119> ; Prix d'un tamagotchi : {}<:coquillette:802972160364249119>".format(usermoney,tamaPrice),
+                           view=CONFIRMATION)
+            await CONFIRMATION.wait()
+            if not CONFIRMATION.value:
+                await ctx.send("Votre achat a été annulé")
+            else:
+                await ctx.send("Achat du tamagotchi en cours...",ephemeral=True)
+                await update_money(self.bot.pool,ctx.author.id,-500.0)
+                await create_tamagotchi(self.bot.pool,ctx.author.id,name)
+                await ctx.send("Votre tamagotchi a été créé !")
 
 async def setup(bot):
     await bot.add_cog(tamagotchi_main(bot))

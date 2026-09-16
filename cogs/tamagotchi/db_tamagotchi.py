@@ -1,4 +1,4 @@
-async def get_or_create_user(pool, user_id: int):
+async def get_or_create_user(pool, user_id: int) -> dict:
     """Récupère un utilisateur ou le crée s'il n'existe pas."""
     async with pool.acquire() as conn:
         user = await conn.fetchrow('SELECT * FROM users WHERE id = $1', user_id)
@@ -49,3 +49,24 @@ async def update_tamagotchi_stats(pool, tamagotchi_id: int, energy_change: int, 
                 current_fun = GREATEST(0, LEAST(max_fun, current_fun + $3))
             WHERE id = $1
         ''', tamagotchi_id, energy_change, fun_change)
+
+async def get_user_money(pool, userid: int) -> int:
+    """Retourne l'argent dans le compte en banque de l'utilisateur, identifié par son id"""
+    async with pool.acquire() as conn:
+        money = await conn.fetchval('SELECT money FROM user WHERE id=$1', userid)
+        return money or 0
+
+# === Valeurs par défaut de l'admin shop
+async def get_base_price_to_buy_tamagotchi(pool) -> int:
+    """Retourne le prix par défaut d'un tamagotchi"""
+    async with pool.acquire() as conn:
+        amount = await conn.fetchval('SELECT tamagotchi_base_price FROM admin_shop_pricings WHERE id=1')
+        return amount or 0
+
+async def create_admin_shop(pool):
+    """Récupère les informations de l'admin shop, ou alors on le créer"""
+    async with pool.acquire() as conn:
+        shop = await conn.fetchrow('SELECT * FROM admin_shop_pricings WHERE id = 1')
+        if not shop:
+            await conn.execute('INSERT INTO admin_shop_pricings (id, tamagotchi_base_price, tamagotchi_skin_base_price) VALUES (1, 500.0,100.0)')
+            shop = await conn.fetchrow('SELECT * FROM admin_shop_pricings WHERE id = 1')
