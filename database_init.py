@@ -31,7 +31,7 @@ async def init_db(pool):
                 current_fun INT DEFAULT 100
             );
 
-            CREATE TABLIE IF NOT EXISTS admin_shop_pricings (
+            CREATE TABLE IF NOT EXISTS admin_shop_pricings (
                 id SERIAL PRIMARY KEY,
                 tamagotchi_base_price DOUBLE PRECISION DEFAULT 500.0,
                 tamagotchi_skin_base_price DOUBLE PRECISION DEFAULT 100.0

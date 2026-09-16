@@ -69,4 +69,3 @@ async def create_admin_shop(pool):
         shop = await conn.fetchrow('SELECT * FROM admin_shop_pricings WHERE id = 1')
         if not shop:
             await conn.execute('INSERT INTO admin_shop_pricings (id, tamagotchi_base_price, tamagotchi_skin_base_price) VALUES (1, 500.0,100.0)')
-            shop = await conn.fetchrow('SELECT * FROM admin_shop_pricings WHERE id = 1')
