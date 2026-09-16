@@ -50,14 +50,14 @@ async def update_tamagotchi_stats(pool, tamagotchi_id: int, energy_change: int, 
             WHERE id = $1
         ''', tamagotchi_id, energy_change, fun_change)
 
-async def get_user_money(pool, userid: int) -> int:
+async def get_user_money(pool, userid: int) -> float:
     """Retourne l'argent dans le compte en banque de l'utilisateur, identifié par son id"""
     async with pool.acquire() as conn:
-        money = await conn.fetchval('SELECT money FROM user WHERE id=$1', userid)
+        money = await conn.fetchval('SELECT money FROM users WHERE id=$1', userid)
         return money or 0
 
 # === Valeurs par défaut de l'admin shop
-async def get_base_price_to_buy_tamagotchi(pool) -> int:
+async def get_base_price_to_buy_tamagotchi(pool) -> float:
     """Retourne le prix par défaut d'un tamagotchi"""
     async with pool.acquire() as conn:
         amount = await conn.fetchval('SELECT tamagotchi_base_price FROM admin_shop_pricings WHERE id=1')

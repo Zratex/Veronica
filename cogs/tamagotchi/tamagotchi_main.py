@@ -35,7 +35,7 @@ class tamagotchi_main(commands.Cog):
                 await ctx.send("Votre achat a été annulé")
             else:
                 await ctx.send("Achat du tamagotchi en cours...",ephemeral=True)
-                await update_money(self.bot.pool,ctx.author.id,-500.0)
+                await update_money(self.bot.pool,ctx.author.id,-tamaPrice)
                 await create_tamagotchi(self.bot.pool,ctx.author.id,name)
                 await ctx.send("Votre tamagotchi a été créé !")
 
