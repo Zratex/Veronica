@@ -1,5 +1,6 @@
 from discord.ext import commands
-from discord import Member, Embed, Color
+from discord import Member
+from ..embedInit import embedInit
 from ..tamagotchi import db_tamagotchi
 
 class profile(commands.Cog):
@@ -16,9 +17,7 @@ class profile(commands.Cog):
         if user==None:
             user = ctx.author
         result = await db_tamagotchi.get_or_create_user(self.bot.pool,user.id)
-        embedVar = Embed(color=Color.blue())
-        embedVar.set_footer(text=self.bot.version,icon_url=f"{self.bot.user.avatar}")
-        embedVar.set_author(name="Commande réalisée par {}".format(ctx.author), icon_url="{}".format(ctx.author.avatar))
+        embedVar = embedInit(ctx.author,self.bot)
         # Affichage du profile de l'utilisateur
         for key, value in result.items():
             if key == "id":
