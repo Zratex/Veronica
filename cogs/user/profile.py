@@ -17,11 +17,8 @@ class profile(commands.Cog):
             userid=user.id 
         else:
             userid = ctx.author.id
-        """#Commentaire temporaire :
         result = await db_tamagotchi.get_or_create_user(self.bot.pool,userid)
         await ctx.send(f"Retour DB : {result}")
-        """
-        await ctx.send("a") #A retirer, et retirer le commentaire
         await ctx.send(f"`Véronica {self.bot.version}`")
 
 async def setup(bot):
