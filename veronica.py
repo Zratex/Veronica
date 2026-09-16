@@ -13,11 +13,16 @@ listOfCogs={"cogs.tamagotchi.tamagotchi_main": ["tamagochi", "tamagotchi", "tama
 
 @bot.event
 async def on_ready():
-    bot.pool = await database_init.create_db_pool() #Connexion à la BD
-    await database_init.init_db(bot.pool) #Initialise la BD si elle est vide
+    bot.poolConnected=True
+    try:
+        bot.pool = await database_init.create_db_pool() #Connexion à la BD
+    except:
+        bot.poolConnected=False
+    if bot.poolConnected != False:
+        await database_init.init_db(bot.pool) #Initialise la BD si elle est vide
     print("Connectée !")
     try:
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="moi ! Je ne fais office que de présence 😎"))
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Je ne fais office que de présence 😎"))
     except Exception as a:
         print(a)
 
@@ -95,7 +100,17 @@ async def sync(ctx) -> None:
 
 """ === Méthode connexion bot avec dockerfile ==="""
 import os
-token = os.environ.get("DISCORD_TOKEN")
-if not token:
-    raise ValueError("Le token Discord n'est pas défini dans les variables d'environnement (DISCORD_TOKEN).")
-bot.run(token)
+token = ""
+try:
+    token = os.environ.get("DISCORD_TOKEN")
+    if not token:
+        raise ValueError("Le token Discord n'est pas défini dans les variables d'environnement (DISCORD_TOKEN).")
+except ValueError:
+    filetoken = open(f"token.txt", "r")
+    for x in filetoken:
+        token=x
+    filetoken.close()
+if token!="":
+    bot.run(token)
+else:
+    raise ValueError("Le token Discord n'est ni défini dans les variables d'environnement du dockerfile, ni dans le fichier local token.txt")
