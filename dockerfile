@@ -17,4 +17,4 @@ RUN pip install asyncpg
 
 COPY . .
 
-CMD ["python", "veronica.py"]
+CMD ["./start.sh"]
