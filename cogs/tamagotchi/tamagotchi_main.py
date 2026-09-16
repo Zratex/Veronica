@@ -23,9 +23,9 @@ class tamagotchi_main(commands.Cog):
         await ctx.send("Souhaitez vous acheter un tamagotchi ?",view=CONFIRMATION)
         await CONFIRMATION.wait()
         if not CONFIRMATION.value:
-            ctx.send("Votre achat a été annulé",ephemeral=True)
+            await ctx.send("Votre achat a été annulé")
         else:
-            ctx.send("(achat du tamagotchi à développer)")
+            await ctx.send("(achat du tamagotchi à développer)")
 
 async def setup(bot):
     await bot.add_cog(tamagotchi_main(bot))
