@@ -2,9 +2,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import database_init
+from getVersion import get_version
 
 zratey_id=323147727779397632
 bot=commands.Bot(command_prefix="v.", intents=discord.Intents.all(),owner=zratey_id) # Zratey#0860 :D
+bot.version = get_version()
 # Création de l'indexation des Cogs sous forme de dictionnaire, dédié aux Cogs qui ne sont pas dans le fichier racine du dépôt
 listOfCogs={"cogs.tamagotchi.tamagotchi_main": ["tamagochi", "tamagotchi", "tamagoshi"],
             "cogs.user.profile": ["profile", "profil"]}
