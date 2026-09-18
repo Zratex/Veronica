@@ -4,11 +4,13 @@ from discord import SelectOption, Interaction
 class Dropdown(Select):
     def __init__(self,optionList: list[dict],placeHolderTitle: str="Veuillez sélectionner une des options présentée..."):
         """Structure de optionList :
-        [{label: "", description: "", emoji: ""},{label: "", description: "", emoji: ""},...]
+        [{label: "", description: "", emoji: "",value=""},{label: "", description: "", emoji: "",value=""},...]
         """
         options = []
         for elt in optionList:
-            options.append(SelectOption(label=elt["label"], description=elt["description"]), emoji=elt["emoji"])
+            if elt["value"]=="":
+                elt["value"]=None
+            options.append(SelectOption(label=elt["label"], description=elt["description"], emoji=elt["emoji"], value=elt["value"]))
         
         super().__init__(placeholder="{}".format(placeHolderTitle), min_values=1, max_values=1, options=options)
 
@@ -23,7 +25,7 @@ class Dropdown(Select):
 class DropdownView(View):
     def __init__(self,optionList: list[dict],placeHolderTitle: str=None):
         """Structure de optionList :
-        [{label: "", description: "", emoji: ""},{label: "", description: "", emoji: ""},...]
+        [{label: "", description: "", emoji: ""},{label: "", description: "", emoji: "", value=""},...]
         """
         super().__init__()
         self.result = None

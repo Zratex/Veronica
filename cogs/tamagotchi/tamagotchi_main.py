@@ -62,7 +62,7 @@ class tamagotchi_main(commands.Cog):
                 resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
                 currentTama = Tamagotchi(**resultQuery)
                 if not(currentTama.estMortVieillesse()):
-                    optionsSelectionTama.append({"label": "{} (`{}`)".format(currentTama.name,currentTama.id), "description": "", "emoji": ""})
+                    optionsSelectionTama.append({"label": "{} (`{}`)".format(currentTama.name,currentTama.id), "description": "", "emoji": "", "value": currentTama.id})
             if len(optionsSelectionTama) == 0:
                 await ctx.send("Tous vos tamagotchis en possession sont morts :/ \nVous ne pouvez donc jouer avec aucun Tamagotchi. N'hésitez pas à en acheter un nouveau.",ephemeral=True)
             else:
