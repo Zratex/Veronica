@@ -36,7 +36,10 @@ async def get_tamagotchis_ids_by_user(pool, user_id: int) -> list:
             'SELECT id FROM tamagotchis WHERE user_id = $1', 
             user_id
         )
-        return [row['id'] for row in rows]
+        if not rows:
+            return []
+        else:
+            return [row['id'] for row in rows]
 
 
 async def update_tamagotchi_stats(pool, tamagotchi_id: int, energy_change: int, fun_change: int):
