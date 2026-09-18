@@ -3,7 +3,7 @@ from discord.ext import commands
 from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
 from ..confirmationView import confirmationView
 from ..embedInit import embedInit
-from ...types.Tamagotchi import Tamagotchi
+from type_classes.Tamagotchi import Tamagotchi
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
