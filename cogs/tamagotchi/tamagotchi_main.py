@@ -21,7 +21,12 @@ class tamagotchi_main(commands.Cog):
                 resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
                 currentTama = Tamagotchi(**resultQuery)
                 embed = embedInit(ctx.author,self.bot)
-                embed.add_field(name="# {}".format(currentTama.name),value="Tamagotchi appartenant à {}".format(ctx.author.name), inline=False)
+                embed.add_field(name="{}".format(currentTama.name),value="Tamagotchi appartenant à {}".format(ctx.author.name), inline=True)
+                embed.add_field(name="Age",value="{}".format(currentTama.age), inline=True)
+                if currentTama.estMortVieillesse():
+                    embed.add_field(name="Status",value="MORT :(", inline=True)
+                else:
+                    embed.add_field(name="Status",value="Vivant !", inline=True)
                 await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")
