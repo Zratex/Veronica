@@ -18,7 +18,8 @@ class tamagotchi_main(commands.Cog):
             await ctx.send("Vous n'avez aucun Tamagotchi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
         else:
             for i in range(len(tamasList)):
-                currentTama = Tamagotchi(**get_tamagotchi_from_id(self.bot.pool,tamasList[i]))
+                resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
+                currentTama = Tamagotchi(**resultQuery)
                 embed = embedInit(ctx.author,self.bot)
                 embed.add_field(name="# {}".format(currentTama.name),value="Tamagotchi appartenant à {}".format(ctx.author.name), inline=False)
                 await ctx.send(embed=embed)
