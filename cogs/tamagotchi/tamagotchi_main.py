@@ -3,6 +3,7 @@ from discord.ext import commands
 from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
 from ..confirmationView import confirmationView
 from ..embedInit import embedInit
+from ...types.Tamagotchi import Tamagotchi
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -14,11 +15,12 @@ class tamagotchi_main(commands.Cog):
     async def tamagotchis(self,ctx: commands.Context):
         tamasList = await get_tamagotchis_ids_by_user(self.bot.pool,ctx.author.id)
         if len(tamasList) == 0:
-            await ctx.send("Vous n'avez aucun Tamagochi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
+            await ctx.send("Vous n'avez aucun Tamagotchi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
         else:
-            for i in range(tamasList):
+            for i in range(len(tamasList)):
+                currentTama = Tamagotchi(**get_tamagotchi_from_id(self.bot.pool,tamasList[i]))
                 embed = embedInit(ctx.author,self.bot)
-                embed.add_field(name="# {}".format(tamasList[i]),value="Tamagochi appartenant à {}".format(ctx.author.name), inline=False)
+                embed.add_field(name="# {}".format(currentTama.name),value="Tamagotchi appartenant à {}".format(ctx.author.name), inline=False)
                 await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")

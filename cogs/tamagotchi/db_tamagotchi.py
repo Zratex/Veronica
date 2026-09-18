@@ -22,10 +22,10 @@ async def create_tamagotchi(pool, user_id: int, name: str):
             user_id, name
         )
 
-async def get_user_tamagotchis(pool, user_id: int):
-    """Récupère tous les tamagotchis d'un joueur."""
+async def get_tamagotchi_from_id(pool, tamagotchi_id: int):
+    """Récupère un tamagotchi à partir de son id."""
     async with pool.acquire() as conn:
-        records = await conn.fetch('SELECT * FROM tamagotchis WHERE user_id = $1', user_id)
+        records = await conn.fetch('SELECT * FROM tamagotchis WHERE id = $1', tamagotchi_id)
         return [dict(record) for record in records]
 
 async def get_tamagotchis_ids_by_user(pool, user_id: int) -> list:
