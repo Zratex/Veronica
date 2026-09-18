@@ -52,6 +52,3 @@ class Tamagotchi:
     def estMortVieillesse(self) -> bool:
         """Retourne vrai si mort de vieillesse"""
         return self.age >= Tamagotchi.lifeTime
-    def __str__(self):
-        """Retourne les informations du Tamagotchi courant"""
-        return "Name : "+self.name+";Age : "+str(self.age)+"; maxEnergy : "+str(self.maxEnergy)+"; Energy : "+str(self.energy)+"; maxiFun : "+str(self.maxiFun)+"; Fun : "+str(self.fun)
