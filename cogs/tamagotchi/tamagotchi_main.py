@@ -4,6 +4,7 @@ from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiqu
 from ..confirmationView import confirmationView
 from ..embedInit import embedInit
 from type_classes.Tamagotchi import Tamagotchi
+from ..dropdownView import DropdownView
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -50,6 +51,28 @@ class tamagotchi_main(commands.Cog):
                 await update_money(self.bot.pool,ctx.author.id,-tamaPrice)
                 await create_tamagotchi(self.bot.pool,ctx.author.id,name)
                 await ctx.send("Votre tamagotchi a été créé !")
+    @commands.hybrid_command(name="play-with-tamagotchi",description="Joue avec un tamagotchi")
+    async def playWithTamagotchi(self,ctx: commands.Context):
+        tamasList = await get_tamagotchis_ids_by_user(self.bot.pool,ctx.author.id)
+        if len(tamasList) == 0:
+            await ctx.send("Vous n'avez aucun Tamagotchi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
+        else:
+            optionsSelectionTama = []
+            for i in range(len(tamasList)):
+                resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
+                currentTama = Tamagotchi(**resultQuery)
+                if not(currentTama.estMortVieillesse()):
+                    optionsSelectionTama.append({"label": "{} (`{}`)".format(currentTama.name+currentTama.id), "description": "", "emoji": ""})
+            if len(optionsSelectionTama) == 0:
+                await ctx.send("Tous vos tamagotchis en possession sont morts :/ \nVous ne pouvez donc jouer avec aucun Tamagotchi. N'hésitez pas à en acheter un nouveau.",ephemeral=True)
+            else:
+                DROPDOWN_SELECTION=DropdownView(optionsSelectionTama,"Sélectionnez le tamagotchi avec lequel vous voudriez jouer...")
+                await ctx.send("Sélectionnez un Tamagotchi avec lequel vous voudriez jouer :",view=DROPDOWN_SELECTION)
+                await DROPDOWN_SELECTION.wait()
+                if not DROPDOWN_SELECTION.result:
+                    await ctx.send("Vous avez pris trop de temps pour répondre...",ephemeral=True)
+                else:
+                    await ctx.send("{}".format(DROPDOWN_SELECTION.result))
 
 async def setup(bot):
     await bot.add_cog(tamagotchi_main(bot))
