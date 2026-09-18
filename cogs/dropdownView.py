@@ -10,6 +10,8 @@ class Dropdown(Select):
         for elt in optionList:
             if elt["value"]=="":
                 elt["value"]=None
+            if elt["emoji"]=="":
+                elt["emoji"]=None
             options.append(SelectOption(label=elt["label"], description=elt["description"], emoji=elt["emoji"], value=elt["value"]))
         
         super().__init__(placeholder="{}".format(placeHolderTitle), min_values=1, max_values=1, options=options)
