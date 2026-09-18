@@ -2,22 +2,26 @@ from random import randint
 
 class Tamagotchi:
     lifeTime=10
-    def __init__(self,name : str):
-        self.age=0
-        self.maxEnergy=randint(5,9)
-        self.energy=randint(3,7) #stat bouffe
-        self.maxiFun=randint(5,9)
-        self.fun=randint(3,7) #stat bonheur
+    def __init__(self,name : str="nom",age: int=0, maxEnergy: int=randint(5,9), energy: int=randint(3,7), maxiFun: int=randint(5,9), fun: int=randint(3,7)):
+        self.age=age
+        self.maxEnergy=maxEnergy
+        self.energy=energy #stat bouffe
+        self.maxiFun=maxiFun
+        self.fun=fun #stat bonheur
         self.name=name
-    def parle(self):
-        """Indique comment va le Tamagotchi"""
+    def parle(self) -> int:
+        """Indique comment va le Tamagotchi
+        0 : il chill
+        1 : il a faim
+        2 : il s'ennuie
+        """
         if self.energy > 4 and self.fun > 4:
-            print(f"{self.name} : I'm bing chilling")
+            return 0
         else:
             if self.energy <= 4:
-                print(f"{self.name} : j'ai faim")
+                return 1
             if self.fun <= 4:
-                print(f"{self.name} : je m'ennuie")
+                return 2
     def mange(self) -> bool:
         """Retourne vrai si il a mangé, faux si il n'a pas faim"""
         if self.energy<self.maxEnergy:

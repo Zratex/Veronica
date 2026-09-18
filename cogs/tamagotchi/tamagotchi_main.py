@@ -2,6 +2,7 @@ from discord.ext import commands
 #Importation des fonctions nécessaires au bout fonctionnement du Tamagotchi.
 from .db_tamagotchi import *  #Le . devant le nom de la fonction est pour indiquer que l'importation se fait dans le dossier locale
 from ..confirmationView import confirmationView
+from ..embedInit import embedInit
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -9,13 +10,16 @@ class tamagotchi_main(commands.Cog):
         if self.bot.poolConnected == False:
             raise Exception("La connexion à la base de donnée a échouée lors de l'initialisation du bot. Par conséquent ce module ne peut être chargé")
     
-    @commands.hybrid_command(name="tamagotchis",description="Liste des tamagotchis")
+    @commands.hybrid_command(name="tamagotchis",description="Liste des tamagotchis en votre possession")
     async def tamagotchis(self,ctx: commands.Context):
-        nbTamas = await count_user_tamagotchis(self.bot.pool,ctx.author.id)
-        if nbTamas == 0:
-            await ctx.send("Tamagotchi à créer")
+        tamasList = await get_tamagotchis_ids_by_user(self.bot.pool,ctx.author.id)
+        if len(tamasList) == 0:
+            await ctx.send("Vous n'avez aucun Tamagochi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
         else:
-            await ctx.send("(à développer)")
+            for i in range(tamasList):
+                embed = embedInit(ctx.author,self.bot)
+                embed.add_field(name="# {}".format(tamasList[i]),value="Tamagochi appartenant à {}".format(ctx.author.name), inline=False)
+                await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="buy-tamagotchi",description="Achat d'un nouveau tamagotchi")
     async def buyTamagotchi(self,ctx: commands.Context, name: str):
