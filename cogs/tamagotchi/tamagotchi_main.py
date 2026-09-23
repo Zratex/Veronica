@@ -5,6 +5,7 @@ from ..confirmationView import confirmationView
 from ..embedInit import embedInit
 from type_classes.Tamagotchi import Tamagotchi
 from ..dropdownView import DropdownView
+from cogs.tamagotchi.views import selectInteractionWithTamagotchiView
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -57,7 +58,7 @@ class tamagotchi_main(commands.Cog):
         if len(tamasList) == 0:
             await ctx.send("Vous n'avez aucun Tamagotchi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
         else:
-            optionsSelectionTama = []
+            optionsSelectionTama: list[Tamagotchi] = []
             for i in range(len(tamasList)):
                 resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
                 currentTama = Tamagotchi(**resultQuery)
@@ -72,7 +73,41 @@ class tamagotchi_main(commands.Cog):
                 if not DROPDOWN_SELECTION.result:
                     await ctx.send("Vous avez pris trop de temps pour répondre...",ephemeral=True)
                 else:
-                    await ctx.send("{}".format(DROPDOWN_SELECTION.result))
+                    currentTama = optionsSelectionTama[DROPDOWN_SELECTION.result]
+                    cycle = 0
+                    # Si il est vivant, ou qu'il ne meurt pas au prochain tour :
+                    while (not currentTama.estMortVieillesse() or not currentTama.consommeEnergie()):
+                        currentTama.age += 1
+                        cycle += 1
+                        need = currentTama.parle()
+                        if need == 0:
+                            need="Ye I'm alr"
+                        elif need==1:
+                            need="J'ai faim !"
+                        elif need==2:
+                            need="Je m'ennuie..."
+                        embed=embedInit(ctx.author,self.bot)
+                        embed.title="Cycle n°{}".format(cycle)
+                        embed.add_field(name="Etat de {}".format(currentTama.name),value="[{}] : {}".format(currentTama.name, need), inline=False)
+                        embed.add_field(name="Action à réaliser",value="Sélectionnez avec les options ci-dessous, une interraction à réaliser avec votre tamagotchi",inline=False)
+                        SELECT_ACTION=selectInteractionWithTamagotchiView()
+                        await ctx.send("Cycle n°{}".format(cycle),embed=embed,view=SELECT_ACTION,ephemeral=True)
+                        await SELECT_ACTION.wait()
+                        if SELECT_ACTION.value == None:
+                            raise Exception("L'interraction de la boucle de gameplay s'est cassé")
+                        if SELECT_ACTION.value: #ça signifie que l'utilisateur veut nourrir son tamagotchi
+                            if currentTama.mange():
+                                await ctx.send("[{}] : `C'était très bon :D`",ephemeral=True)
+                            else:
+                                await ctx.send("[{}] : `Je n'ai pas faim !`",ephemeral=True)
+                        else: #Sinon ça signifie que l'utilisateut veut jouer avec son tamagotchi
+                            if currentTama.joue():
+                                await ctx.send("[{}] : `C'était très cool !`",ephemeral=True)
+                            else:
+                                await ctx.send("[{}] : `Eh ! Mais laisse moi tranquille !`".format(currentTama.name),ephemeral=True)
+                    #await update_tamagotchi_stats(self.bot.pool,currentTama.id,currentTama.current_energy,currentTama.currentFun)
+                    await ctx.send("Votre Tamagotchi {} est malheureusement décédé. Votre score : **{} points**".format(currentTama.name,(currentTama.age / Tamagotchi.lifeTime)*100))
+                    
 
 async def setup(bot):
     await bot.add_cog(tamagotchi_main(bot))
