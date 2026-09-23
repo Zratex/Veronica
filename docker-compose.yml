@@ -8,6 +8,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRE_PASSWORD}
       - POSTGRES_DB=veronicadb
       - POSTGRES_HOST=db
+      - DPYSTATUS_HOST=${STATUS_IP}
+      - DPYSTATUS_PORT=${STATUS_PORT}
+    ports:
+      - "${STATUS_PORT}:${STATUS_PORT}"
     depends_on:
       db:
         condition: service_healthy
