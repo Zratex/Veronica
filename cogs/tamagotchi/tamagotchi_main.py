@@ -58,10 +58,12 @@ class tamagotchi_main(commands.Cog):
         if len(tamasList) == 0:
             await ctx.send("Vous n'avez aucun Tamagotchi en votre possession. Veuillez vous en acheter un !", ephemeral=True)
         else:
-            optionsSelectionTama: list[Tamagotchi] = []
+            listOfTamas: list[Tamagotchi] = []
+            optionsSelectionTama=[]
             for i in range(len(tamasList)):
                 resultQuery=await get_tamagotchi_from_id(self.bot.pool,tamasList[i])
                 currentTama = Tamagotchi(**resultQuery)
+                listOfTamas.append(currentTama)
                 if not(currentTama.estMortVieillesse()):
                     optionsSelectionTama.append({"label": "{} (id : {})".format(currentTama.name,currentTama.id), "description": "", "emoji": "", "value": currentTama.id})
             if len(optionsSelectionTama) == 0:
@@ -73,12 +75,18 @@ class tamagotchi_main(commands.Cog):
                 if not DROPDOWN_SELECTION.result:
                     await ctx.send("Vous avez pris trop de temps pour répondre...",ephemeral=True)
                 else:
-                    currentTama = optionsSelectionTama[DROPDOWN_SELECTION.result]
+                    # On récupère le Tamagotchi que l'utilisateur a choisi :
+                    for elt in listOfTamas:
+                        if DROPDOWN_SELECTION.result == elt.id:
+                            currentTama=elt
+                            break
+                    # Lancement du cycle du jeu :
                     cycle = 0
                     # Si il est vivant, ou qu'il ne meurt pas au prochain tour :
                     while (not currentTama.estMortVieillesse() or not currentTama.consommeEnergie()):
                         currentTama.age += 1
                         cycle += 1
+                        # Affichage des besoins du tamagotchi :
                         need = currentTama.parle()
                         if need == 0:
                             need="Ye I'm alr"
@@ -90,11 +98,12 @@ class tamagotchi_main(commands.Cog):
                         embed.title="Cycle n°{}".format(cycle)
                         embed.add_field(name="Etat de {}".format(currentTama.name),value="[{}] : {}".format(currentTama.name, need), inline=False)
                         embed.add_field(name="Action à réaliser",value="Sélectionnez avec les options ci-dessous, une interraction à réaliser avec votre tamagotchi",inline=False)
+                        # Gestion du choix de l'utilisateur :
                         SELECT_ACTION=selectInteractionWithTamagotchiView()
                         await ctx.send("Cycle n°{}".format(cycle),embed=embed,view=SELECT_ACTION,ephemeral=True)
                         await SELECT_ACTION.wait()
                         if SELECT_ACTION.value == None:
-                            raise Exception("L'interraction de la boucle de gameplay s'est cassé")
+                            raise Exception("L'interraction de la boucle de gameplay s'est cassé par inactivité ?")
                         if SELECT_ACTION.value: #ça signifie que l'utilisateur veut nourrir son tamagotchi
                             if currentTama.mange():
                                 await ctx.send("[{}] : `C'était très bon :D`",ephemeral=True)
@@ -105,6 +114,8 @@ class tamagotchi_main(commands.Cog):
                                 await ctx.send("[{}] : `C'était très cool !`",ephemeral=True)
                             else:
                                 await ctx.send("[{}] : `Eh ! Mais laisse moi tranquille !`".format(currentTama.name),ephemeral=True)
+                        # Le tour d'après va vérifier si le tamagotchi est décédé ou non
+                    # Fin de la boucle de gameplay :
                     #await update_tamagotchi_stats(self.bot.pool,currentTama.id,currentTama.current_energy,currentTama.currentFun)
                     await ctx.send("Votre Tamagotchi {} est malheureusement décédé. Votre score : **{} points**".format(currentTama.name,(currentTama.age / Tamagotchi.lifeTime)*100))
                     
