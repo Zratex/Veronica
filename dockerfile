@@ -4,6 +4,7 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        git \
         gcc \
         build-essential \
         libffi-dev && \
