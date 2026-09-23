@@ -22,6 +22,8 @@ Le déploiement se réalise via conteneur Docker. Personnellement j'utilise Port
 - Ajout du jeu du Tamagotchi (pour le moment n'a pas d'intérêt)
 - Ajout des git tags
 
+Objectif : mettre en place un environnement de développement et déploiement sain avant de commencer un développement plus profond des fonctionnalités complexes prévues pour ce bot Discord.
+
 > L'API Symfony a pour le moment été abandonné. L'implémentation d'une vrai API se fera plus tard
 ### - Alpha 1.4
 Réagencement des dossiers pour que ce soit plus lisibles sur Github, mais surtout début de l'implémentation d'un back-end en API platform.
