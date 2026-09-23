@@ -40,11 +40,13 @@ class Tamagotchi:
             return True
         else:
             return False
-    def consommeEnergie(self) -> bool:
-        """Retourne vrai si meurt suite au passage de tour"""
-        self.current_energy-=randint(1,3)
-        self.currentFun-=randint(1,3)
-        return not (self.current_energy <= 0 or self.currentFun <= 0)
+    def estMortDenergy(self) -> bool:
+        """Retourne vrai si il est mort d'énergiemeurt suite au passage de tour"""
+        return self.current_energy <= 0
+    def estMortDeMarasme(self) -> bool:
+        """Retourne vrai si mort par manque de nourriture"""
+        return self.currentFun <= 0
+
     def estMortVieillesse(self) -> bool:
         """Retourne vrai si il est déjà mort de vieillesse"""
         return self.age >= Tamagotchi.lifeTime

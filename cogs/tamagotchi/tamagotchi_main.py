@@ -6,6 +6,7 @@ from ..embedInit import embedInit
 from type_classes.Tamagotchi import Tamagotchi
 from ..dropdownView import DropdownView
 from .views.selectInteractionWithTamagotchiView import selectInteractionWithTamagotchiView
+from random import randint
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
@@ -82,9 +83,8 @@ class tamagotchi_main(commands.Cog):
                             break
                     # Lancement du cycle du jeu :
                     cycle = 0
-                    # Si il est vivant, ou qu'il ne meurt pas au prochain tour :
-                    while (not currentTama.estMortVieillesse() or not currentTama.consommeEnergie()):
-                        currentTama.age += 1
+                    # Si il est vivant, ou qu'il a assez d'énergie, ou qu'il est assez nourrit :
+                    while (not currentTama.estMortVieillesse() or not currentTama.estMortDenergy() or not currentTama.estMortDeMarasme()):
                         cycle += 1
                         # Affichage des besoins du tamagotchi :
                         need = currentTama.parle()
@@ -106,18 +106,27 @@ class tamagotchi_main(commands.Cog):
                             raise Exception("L'interraction de la boucle de gameplay s'est cassé par inactivité ?")
                         if SELECT_ACTION.value: #ça signifie que l'utilisateur veut nourrir son tamagotchi
                             if currentTama.mange():
-                                await ctx.send("[{}] : `C'était très bon :D`",ephemeral=True)
+                                await ctx.send("[{}] : `C'était très bon :D`".format(currentTama.name),ephemeral=True)
                             else:
-                                await ctx.send("[{}] : `Je n'ai pas faim !`",ephemeral=True)
+                                await ctx.send("[{}] : `Je n'ai pas faim !`".format(currentTama.name),ephemeral=True)
                         else: #Sinon ça signifie que l'utilisateut veut jouer avec son tamagotchi
                             if currentTama.joue():
-                                await ctx.send("[{}] : `C'était très cool !`",ephemeral=True)
+                                await ctx.send("[{}] : `C'était très cool !`".format(currentTama.name),ephemeral=True)
                             else:
                                 await ctx.send("[{}] : `Eh ! Mais laisse moi tranquille !`".format(currentTama.name),ephemeral=True)
-                        # Le tour d'après va vérifier si le tamagotchi est décédé ou non
+                        # Actualisation des statistiques pour l'execution du prochain tour :
+                        currentTama.current_energy-=randint(1,3)
+                        currentTama.currentFun-=randint(1,3)
+                        currentTama.age += 1
                     # Fin de la boucle de gameplay :
                     #await update_tamagotchi_stats(self.bot.pool,currentTama.id,currentTama.current_energy,currentTama.currentFun)
-                    await ctx.send("Votre Tamagotchi {} est malheureusement décédé. Votre score : **{} points**".format(currentTama.name,(currentTama.age / Tamagotchi.lifeTime)*100))
+                    if currentTama.estMortVieillesse():
+                        result="de vieillesse"
+                    elif currentTama.estMortDenergy():
+                        result="par manque d'énergie (pas assez de fun)"
+                    elif currentTama.estMortDeMarasme():
+                        result="par manque de nourriture"
+                    await ctx.send("Votre Tamagotchi {} est malheureusement **décédé {}**. Votre score : **{} points**".format(currentTama.name,result,(currentTama.age / Tamagotchi.lifeTime)*100))
                     
 
 async def setup(bot):
