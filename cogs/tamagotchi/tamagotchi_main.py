@@ -83,8 +83,8 @@ class tamagotchi_main(commands.Cog):
                             break
                     # Lancement du cycle du jeu :
                     cycle = 0
-                    # Si il est vivant, ou qu'il a assez d'énergie, ou qu'il est assez nourrit :
-                    while (not currentTama.estMortVieillesse() or not currentTama.estMortDenergy() or not currentTama.estMortDeMarasme()):
+                    # Si il est vivant, et qu'il a assez d'énergie, et qu'il est assez nourrit :
+                    while (not currentTama.estMortVieillesse() and not currentTama.estMortDenergy() and not currentTama.estMortDeMarasme()):
                         cycle += 1
                         # Affichage des besoins du tamagotchi :
                         need = currentTama.parle()
