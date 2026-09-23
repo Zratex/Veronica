@@ -26,10 +26,10 @@ async def init_db(pool):
                 user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
                 name VARCHAR(255) NOT NULL,
                 age VARCHAR(255) DEFAULT 0,
-                max_energy INT DEFAULT 100,
-                current_energy INT DEFAULT 100,
-                max_fun INT DEFAULT 100,
-                current_fun INT DEFAULT 100
+                max_energy INT DEFAULT 10,
+                current_energy INT DEFAULT 10,
+                max_fun INT DEFAULT 10,
+                current_fun INT DEFAULT 10
             );
 
             CREATE TABLE IF NOT EXISTS admin_shop_pricings (
