@@ -5,7 +5,7 @@ from ..confirmationView import confirmationView
 from ..embedInit import embedInit
 from type_classes.Tamagotchi import Tamagotchi
 from ..dropdownView import DropdownView
-from cogs.tamagotchi.views import selectInteractionWithTamagotchiView
+from views.selectInteractionWithTamagotchiView import selectInteractionWithTamagotchiView
 
 class tamagotchi_main(commands.Cog):
     def __init__(self, bot):
