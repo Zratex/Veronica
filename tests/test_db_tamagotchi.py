@@ -6,7 +6,7 @@ Ces tests utilisent la fixture `pool` (voir conftest.py), qui pointe vers une
 base de données PostgreSQL de test créée pour l'occasion — jamais la prod.
 Les tables métier ("users", "tamagotchis") sont vidées avant chaque test.
 """
-import pytest
+import pytest # type: ignore
 
 from cogs.tamagotchi import db_tamagotchi
 from type_classes.Tamagotchi import Tamagotchi

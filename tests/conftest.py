@@ -36,7 +36,7 @@ import sys
 from pathlib import Path
 
 import asyncpg
-import pytest_asyncio
+import pytest_asyncio # type: ignore
 
 # Permet d'importer les modules du projet (database_init, cogs.*, type_classes.*)
 # peu importe le répertoire depuis lequel `pytest` est lancé.
