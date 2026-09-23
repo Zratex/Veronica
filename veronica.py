@@ -34,9 +34,13 @@ async def on_ready():
         await database_init.init_db(bot.pool) #Initialise la BD si elle est vide
     print("Connectée !")
     try:
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Je ne fais office que de présence 😎"))
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name="🔧{}".format(bot.version)))
     except Exception as a:
         print(a)
+    try:
+        await bot.load_extension("dPyStatus.extension")
+    except Exception as a:
+        print("Le chargement du module de status Discord a généré une erreur : {}".format(a))
 
 @bot.tree.command(name="load",description="Charge un module de commandes. Cette commande n'est utilisable que par Zratey")
 @app_commands.describe(module="Module à charger")
