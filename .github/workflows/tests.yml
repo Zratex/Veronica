@@ -1,0 +1,55 @@
+name: Tests
+
+# Déclenché sur un push vers N'IMPORTE QUELLE branche (pas de filtre "branches:"),
+# ainsi que sur toute Pull Request. Retire "pull_request" si tu ne veux garder
+# que le déclenchement sur push.
+on:
+  push:
+  pull_request:
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+
+    # Postgres éphémère fourni par GitHub Actions le temps du job, détruit à la
+    # fin. Les identifiants ci-dessous ne sont valables QUE dans ce conteneur
+    # jetable : ce n'est pas ta BD de prod et ça n'a pas besoin d'être un secret.
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: veronica
+          POSTGRES_PASSWORD: ci_password
+          POSTGRES_DB: veronicadb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U veronica -d veronicadb"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: veronica
+      POSTGRES_PASSWORD: ci_password
+      POSTGRES_DB: veronicadb
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installation des dépendances (prod + tests)
+        run: pip install -r requirements-dev.txt
+
+      # Pas besoin d'attendre Postgres manuellement : le "options: --health-cmd"
+      # ci-dessus fait déjà patienter GitHub Actions tant que le service n'est
+      # pas prêt, avant de lancer la moindre étape du job.
+      - name: Lancement de la suite de tests
+        run: pytest -v

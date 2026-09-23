@@ -1,4 +1,5 @@
 token.txt
+**/__pycache__
 /back/veronica-api/.idea/
 ###> symfony/framework-bundle ###
 /back/veronica-api/.env.local

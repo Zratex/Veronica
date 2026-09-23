@@ -6,12 +6,9 @@ from ..tamagotchi import db_tamagotchi
 class profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        """# Commentaire à retirer
         if self.bot.poolConnected == False:
             raise Exception("La connexion à la base de donnée a échouée lors de l'initialisation du bot. Par conséquent ce module ne peut être chargé")
-        """
-    
-    #TEST COMMAND
+
     @commands.hybrid_command(name="profile",description="Récupérez les informations sur vous même ou un autre utilisateur")
     async def profile(self,ctx: commands.Context, user: Member=None):
         if user==None:

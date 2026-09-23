@@ -22,22 +22,25 @@ async def create_tamagotchi(pool, user_id: int, name: str):
             user_id, name
         )
 
-async def get_user_tamagotchis(pool, user_id: int):
-    """Récupère tous les tamagotchis d'un joueur."""
+async def get_tamagotchi_from_id(pool, tamagotchi_id: int) -> dict|None:
+    """Récupère un tamagotchi à partir de son id."""
     async with pool.acquire() as conn:
-        records = await conn.fetch('SELECT * FROM tamagotchis WHERE user_id = $1', user_id)
-        return [dict(record) for record in records]
+        # fetchrow renvoie un seul enregistrement (ou None s'il n'existe pas)
+        record = await conn.fetchrow('SELECT * FROM tamagotchis WHERE id = $1', tamagotchi_id)
+        
+        if record:
+            return dict(record) # Retourne un dictionnaire (pas de liste)
+        return None # Aucun Tamagotchi trouvé
 
-async def count_user_tamagotchis(pool, user_id: int) -> int:
-    """Compte le nombre de tamagotchis possédés par un utilisateur."""
+async def get_tamagotchis_ids_by_user(pool, user_id: int) -> list[int]:
+    """Retourne la liste des IDs des tamagotchis possédés par un utilisateur."""
     async with pool.acquire() as conn:
-        # fetchval est utilisé au lieu de fetchrow car on attend une seule valeur (le compteur)
-        count = await conn.fetchval(
-            'SELECT COUNT(*) FROM tamagotchis WHERE user_id = $1', 
+        rows = await conn.fetch(
+            'SELECT id FROM tamagotchis WHERE user_id = $1',
             user_id
         )
-        # On retourne le compte, ou 0 si la requête ne renvoie rien
-        return count or 0
+
+        return [row['id'] for row in rows]
 
 
 async def update_tamagotchi_stats(pool, tamagotchi_id: int, energy_change: int, fun_change: int):
