@@ -43,7 +43,7 @@ jobs:
       - name: Installation de Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Installation des dépendances (prod + tests)
         run: pip install -r requirements-dev.txt
